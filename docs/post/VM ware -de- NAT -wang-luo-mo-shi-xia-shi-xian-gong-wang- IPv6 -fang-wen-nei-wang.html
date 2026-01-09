@@ -12,11 +12,11 @@
     </script>
 <meta name="description" content="# 问题：
 
-在 VM Ware 的 **NAT 网络模式**下，在宿主机通过端口映射（转发），实现访问宿主机 http://192.168.33.100:8080 就能到达虚拟机 http://192.168.100.104:80， 同时解决公网 IPv6 访问内网。">
+在 VM Ware 的 **NAT 网络模式**下，在宿主机通过端口映射（转发），实现访问宿主机 http://192.168.33.100:8080 就能到达虚拟机 http://192.168.100.104:80， 同时解决公网 IPv6 访问内网（**前提是在宿主机里已经获得公网 IPv6 的地址**，但又不想通过 VM 的虚拟网络的桥接模式 ，这里介绍的是**NAT模式**）。">
 <meta property="og:title" content="VM ware 的 NAT 网络模式下实现公网 IPv6 访问内网">
 <meta property="og:description" content="# 问题：
 
-在 VM Ware 的 **NAT 网络模式**下，在宿主机通过端口映射（转发），实现访问宿主机 http://192.168.33.100:8080 就能到达虚拟机 http://192.168.100.104:80， 同时解决公网 IPv6 访问内网。">
+在 VM Ware 的 **NAT 网络模式**下，在宿主机通过端口映射（转发），实现访问宿主机 http://192.168.33.100:8080 就能到达虚拟机 http://192.168.100.104:80， 同时解决公网 IPv6 访问内网（**前提是在宿主机里已经获得公网 IPv6 的地址**，但又不想通过 VM 的虚拟网络的桥接模式 ，这里介绍的是**NAT模式**）。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://donsaxiao.github.io/post/VM%20ware%20-de-%20NAT%20-wang-luo-mo-shi-xia-shi-xian-gong-wang-%20IPv6%20-fang-wen-nei-wang.html">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/96248528?v=4">
@@ -88,7 +88,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
     <div id="content">
 <div class="markdown-body" id="postBody"><h1>问题：</h1>
-<p>在 VM Ware 的 <strong>NAT 网络模式</strong>下，在宿主机通过端口映射（转发），实现访问宿主机 <a href="http://192.168.33.100:8080" rel="nofollow">http://192.168.33.100:8080</a> 就能到达虚拟机 <a href="http://192.168.100.104:80%EF%BC%8C" rel="nofollow">http://192.168.100.104:80，</a> 同时解决公网 IPv6 访问内网。</p>
+<p>在 VM Ware 的 <strong>NAT 网络模式</strong>下，在宿主机通过端口映射（转发），实现访问宿主机 <a href="http://192.168.33.100:8080" rel="nofollow">http://192.168.33.100:8080</a> 就能到达虚拟机 <a href="http://192.168.100.104:80%EF%BC%8C" rel="nofollow">http://192.168.100.104:80，</a> 同时解决公网 IPv6 访问内网（<strong>前提是在宿主机里已经获得公网 IPv6 的地址</strong>，但又不想通过 VM 的虚拟网络的桥接模式 ，这里介绍的是<strong>NAT模式</strong>）。</p>
 <h1>解决方法：</h1>
 <p>要在 Windows 10 上实现这个复杂的网络需求，你需要完成<strong>三步配置</strong>。因为你的目标是让外网通过宿主机的 IP:8080 访问到虚拟机的 80 端口，这不仅仅是“放行防火墙”，核心在于<strong>端口映射（转发）</strong>。</p>
 <p><strong>由于涉及到 IPv6 和 IPv4 的双栈访问</strong>，我们需要确保流量能正确从宿主机“<strong>跳转</strong>”到虚拟机。</p>
