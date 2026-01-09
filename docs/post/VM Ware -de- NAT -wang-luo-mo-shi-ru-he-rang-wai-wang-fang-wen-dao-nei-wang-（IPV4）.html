@@ -10,15 +10,9 @@
         let theme = localStorage.getItem("meek_theme") || "light";
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
-<meta name="description" content="# **VM Ware 的 NAT 网络模式如何让外网访问到内网（IPV4）**
-
-
-在 VMware 的 NAT（网络地址转换）模式下，默认情况下虚拟机是被“隐藏”在宿主机（物理机）后面的。">
+<meta name="description" content="在 VMware 的 NAT（网络地址转换）模式下，默认情况下虚拟机是被“隐藏”在宿主机（物理机）后面的。">
 <meta property="og:title" content="VM Ware 的 NAT 网络模式如何让外网访问到内网（IPV4）">
-<meta property="og:description" content="# **VM Ware 的 NAT 网络模式如何让外网访问到内网（IPV4）**
-
-
-在 VMware 的 NAT（网络地址转换）模式下，默认情况下虚拟机是被“隐藏”在宿主机（物理机）后面的。">
+<meta property="og:description" content="在 VMware 的 NAT（网络地址转换）模式下，默认情况下虚拟机是被“隐藏”在宿主机（物理机）后面的。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://donsaxiao.github.io/post/VM%20Ware%20-de-%20NAT%20-wang-luo-mo-shi-ru-he-rang-wai-wang-fang-wen-dao-nei-wang-%EF%BC%88IPV4%EF%BC%89.html">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/96248528?v=4">
@@ -79,8 +73,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
 </div>
     <div id="content">
-<div class="markdown-body" id="postBody"><h1><strong>VM Ware 的 NAT 网络模式如何让外网访问到内网（IPV4）</strong></h1>
-<p>在 VMware 的 NAT（网络地址转换）模式下，默认情况下虚拟机是被“隐藏”在宿主机（物理机）后面的。这意味着虚拟机可以访问外网，但外网（包括局域网内的其他设备）无法直接访问虚拟机。</p>
+<div class="markdown-body" id="postBody"><p>在 VMware 的 NAT（网络地址转换）模式下，默认情况下虚拟机是被“隐藏”在宿主机（物理机）后面的。这意味着虚拟机可以访问外网，但外网（包括局域网内的其他设备）无法直接访问虚拟机。</p>
 <p>为了让外网能够访问到 NAT 模式下的虚拟机，核心思路是**“端口转发”（Port Forwarding）**。你可以把它想象成：在宿主机这个“大门”上开一个特定的“小窗口”，把发往这个窗口的请求，定向传递给身后的虚拟机。</p>
 <p>以下是具体的实现步骤和方案：</p>
 <h2>🛠️ <strong>方案一：配置 VMware 端口转发（最常用）</strong></h2>
