@@ -32,7 +32,14 @@ netsh interface portproxy add v4tov4 listenaddress=192.168.33.100 listenport=808
 netsh interface portproxy add v6tov4 listenaddress=2001:db8::100 listenport=8080 connectaddress=192.168.100.104 connectport=80
 ```
 
-* **⚠️ 注意：** 请将 **2001:db8::100** 替换为你的宿主机实际的 IPv6 地址。
+``` cmd
+netsh interface portproxy add v6tov4 listenaddress=2001:db8::100 listenport=9000 connectaddress=192.168.100.102 connectport=9000
+```
+
+* **⚠️ 注意：** 
+* 请将 **2001:db8::100** 替换为你的宿主机实际的 IPv6 地址。
+* netsh interface portproxy add 这条命令**不支持**在单次执行时通过一个命令行添加多条映射规则。所以，
+**每一个 add 命令只能定义一个**具体的“监听端口”到“目标地址+端口”的映射关系。
 
 ### 1.3 验证映射是否成功
 输入以下命令查看是否出现刚才添加的两条规则：
