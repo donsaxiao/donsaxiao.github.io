@@ -98,6 +98,9 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 假设你想把原来指向 <code class="notranslate">192.168.100.104:80</code> 的流量，修改为指向 <code class="notranslate">192.168.100.105:8080</code>，你需要执行：</p>
 <ol>
 <li><strong>查看原规则</strong>：确认原来的 <code class="notranslate">listenaddress</code> 和 <code class="notranslate">listenport</code> 是什么（虽然你不改它们，但命令里必须写上）。</li>
+<li><strong>使用查看命令</strong>：要是不确已添加的规则，可以使用以下命令查看。
+<div class="highlight highlight-source-batchfile"><pre class="notranslate"><span class="pl-k">netsh</span> interface portproxy show all</pre></div>
+</li>
 <li><strong>执行修改命令</strong>：
 <div class="highlight highlight-source-batchfile"><pre class="notranslate"><span class="pl-k">netsh</span> interface portproxy <span class="pl-k">set</span> <span class="pl-smi">v6tov4 listenaddress</span><span class="pl-k">=</span>2001:db8::100 listenport=<span class="pl-c1">8080</span> connectaddress=192.168.100.105 connectport=<span class="pl-c1">8080</span></pre></div>
 <blockquote>

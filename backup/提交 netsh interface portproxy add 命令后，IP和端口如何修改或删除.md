@@ -17,7 +17,11 @@ netsh interface portproxy set v6tov4 listenaddress=<原来的监听IP> listenpor
 假设你想把原来指向 `192.168.100.104:80` 的流量，修改为指向 `192.168.100.105:8080`，你需要执行：
 
 1.  **查看原规则**：确认原来的 `listenaddress` 和 `listenport` 是什么（虽然你不改它们，但命令里必须写上）。
-2.  **执行修改命令**：
+2.  **使用查看命令**：要是不确已添加的规则，可以使用以下命令查看。
+    ```cmd
+    netsh interface portproxy show all
+    ```
+3.  **执行修改命令**：    
     ```cmd
     netsh interface portproxy set v6tov4 listenaddress=2001:db8::100 listenport=8080 connectaddress=192.168.100.105 connectport=8080
     ```
