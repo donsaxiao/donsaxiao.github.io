@@ -10,13 +10,13 @@
         let theme = localStorage.getItem("meek_theme") || "light";
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
-<meta name="description" content="## 问：提交 netsh interface portproxy add 命令后，如何修改之前提交的IP和端口？
+<meta name="description" content="### 问：提交 netsh interface portproxy add 命令后，如何修改之前提交的IP和端口？
 
-在 Windows 的 `netsh interface portproxy` 中，修改已存在的规则主要使用 **`set`** 命令，或者采用**“先删除后添加”**的策略。">
+在 Windows 的 `netsh interface portproxy` 中，修改已存在的规则主要使用 **`set`** 命令，或者采用 **“先删除后添加”** 的策略。">
 <meta property="og:title" content="提交 netsh interface portproxy add 命令后，如何修改之前提交的 IP和端口">
-<meta property="og:description" content="## 问：提交 netsh interface portproxy add 命令后，如何修改之前提交的IP和端口？
+<meta property="og:description" content="### 问：提交 netsh interface portproxy add 命令后，如何修改之前提交的IP和端口？
 
-在 Windows 的 `netsh interface portproxy` 中，修改已存在的规则主要使用 **`set`** 命令，或者采用**“先删除后添加”**的策略。">
+在 Windows 的 `netsh interface portproxy` 中，修改已存在的规则主要使用 **`set`** 命令，或者采用 **“先删除后添加”** 的策略。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://donsaxiao.github.io/post/ti-jiao-%20netsh%C2%A0interface%C2%A0portproxy%C2%A0add%C2%A0-ming-ling-hou-%EF%BC%8C-ru-he-xiu-gai-zhi-qian-ti-jiao-de-%20IP-he-duan-kou.html">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/96248528?v=4">
@@ -87,8 +87,8 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
 </div>
     <div id="content">
-<div class="markdown-body" id="postBody"><h2>问：提交 netsh interface portproxy add 命令后，如何修改之前提交的IP和端口？</h2>
-<p>在 Windows 的 <code class="notranslate">netsh interface portproxy</code> 中，修改已存在的规则主要使用 <strong><code class="notranslate">set</code></strong> 命令，或者采用**“先删除后添加”**的策略。</p>
+<div class="markdown-body" id="postBody"><h3>问：提交 netsh interface portproxy add 命令后，如何修改之前提交的IP和端口？</h3>
+<p>在 Windows 的 <code class="notranslate">netsh interface portproxy</code> 中，修改已存在的规则主要使用 <strong><code class="notranslate">set</code></strong> 命令，或者采用 <strong>“先删除后添加”</strong> 的策略。</p>
 <p>针对你之前提交的 <code class="notranslate">v6tov4</code>（IPv6 监听转 IPv4 目标）规则，以下是具体的修改方法：</p>
 <h3>方法一：使用 <code class="notranslate">set</code> 命令（推荐，直接修改）</h3>
 <p>这是最直接的方法，它会修改现有的映射关系，而不需要重新创建。</p>

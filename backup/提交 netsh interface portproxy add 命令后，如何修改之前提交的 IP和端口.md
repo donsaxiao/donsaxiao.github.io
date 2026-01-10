@@ -1,6 +1,6 @@
-## 问：提交 netsh interface portproxy add 命令后，如何修改之前提交的IP和端口？
+### 问：提交 netsh interface portproxy add 命令后，如何修改之前提交的IP和端口？
 
-在 Windows 的 `netsh interface portproxy` 中，修改已存在的规则主要使用 **`set`** 命令，或者采用**“先删除后添加”**的策略。
+在 Windows 的 `netsh interface portproxy` 中，修改已存在的规则主要使用 **`set`** 命令，或者采用 **“先删除后添加”** 的策略。
 
 针对你之前提交的 `v6tov4`（IPv6 监听转 IPv4 目标）规则，以下是具体的修改方法：
 
