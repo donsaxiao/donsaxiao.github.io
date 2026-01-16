@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="https://avatars.githubusercontent.com/u/96248528?v=4"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="# 外网通过域名/公网IPv6访问内网VMware虚拟机 实施方案
+## 一、需求定义
+在 **VMware NAT 网络模式** 下，基于 Win10 宿主机搭建端口转发与反向代理体系，实现以下三类访问路径：
+1.  内网访问：`http://192.168.33.100:3335` → 转发至虚拟机 `http://192.168.100.101:335`
+2.  公网IPv6访问：`https://[公网IPv6]:3335` → 转到虚拟机 `http://192.168.100.101:335`
+3.  域名访问：`https://web.vm.xds.net` → 映射至虚拟机 `http://192.168.100.101:335`
+
+## 二、方案背景与逻辑链路
+### 1. 网络环境前提
+宿主机已获取 **公网IPv6地址**，虚拟机采用 VMware NAT 模式组网，与宿主机处于不同内网网段。">
+<meta property="og:title" content="外网通过域名/公网IPv6访问内网VMware虚拟机">
+<meta property="og:description" content="# 外网通过域名/公网IPv6访问内网VMware虚拟机 实施方案
+## 一、需求定义
+在 **VMware NAT 网络模式** 下，基于 Win10 宿主机搭建端口转发与反向代理体系，实现以下三类访问路径：
+1.  内网访问：`http://192.168.33.100:3335` → 转发至虚拟机 `http://192.168.100.101:335`
+2.  公网IPv6访问：`https://[公网IPv6]:3335` → 转到虚拟机 `http://192.168.100.101:335`
+3.  域名访问：`https://web.vm.xds.net` → 映射至虚拟机 `http://192.168.100.101:335`
+
+## 二、方案背景与逻辑链路
+### 1. 网络环境前提
+宿主机已获取 **公网IPv6地址**，虚拟机采用 VMware NAT 模式组网，与宿主机处于不同内网网段。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://donsaxiao.github.io/post/wai-wang-tong-guo-yu-ming---gong-wang-IPv6-fang-wen-nei-wang-VMware-xu-ni-ji.html">
+<meta property="og:image" content="https://avatars.githubusercontent.com/u/96248528?v=4">
+<title>外网通过域名/公网IPv6访问内网VMware虚拟机</title>
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+.copy-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    color: var(--color-fg-on-emphasis);
+    background-color: var(--color-fg-muted);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 12px;
+}
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">外网通过域名/公网IPv6访问内网VMware虚拟机</h1>
+<div class="title-right">
+    <a href="https://donsaxiao.github.io" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/donsaxiao/donsaxiao.github.io/issues/8" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><h1>外网通过域名/公网IPv6访问内网VMware虚拟机 实施方案</h1>
+<h2>一、需求定义</h2>
+<p>在 <strong>VMware NAT 网络模式</strong> 下，基于 Win10 宿主机搭建端口转发与反向代理体系，实现以下三类访问路径：</p>
+<ol>
+<li>内网访问：<code class="notranslate">http://192.168.33.100:3335</code> → 转发至虚拟机 <code class="notranslate">http://192.168.100.101:335</code></li>
+<li>公网IPv6访问：<code class="notranslate">https://[公网IPv6]:3335</code> → 转到虚拟机 <code class="notranslate">http://192.168.100.101:335</code></li>
+<li>域名访问：<code class="notranslate">https://web.vm.xds.net</code> → 映射至虚拟机 <code class="notranslate">http://192.168.100.101:335</code></li>
+</ol>
+<h2>二、方案背景与逻辑链路</h2>
+<h3>1. 网络环境前提</h3>
+<p>宿主机已获取 <strong>公网IPv6地址</strong>，虚拟机采用 VMware NAT 模式组网，与宿主机处于不同内网网段。</p>
+<h3>2. 核心技术选型</h3>
+<p>采用 <strong>Lucky 工具</strong> 实现动态域名解析（DDNS）+ 反向代理，解决两大核心问题：</p>
+<ul>
+<li>公网IPv6地址动态变化的域名绑定问题</li>
+<li>运营商封禁443端口后，外网无端口访问的需求</li>
+</ul>
+<h3>3. 完整数据转发链路</h3>
+<pre class="notranslate"><code class="notranslate">https://web.vm.xds.net（外网域名请求）
+  ↓  Cloudflare CDN 转发（仅支持 443/2053 等合规HTTPS端口）
+https://web.vm.xds.net:2053（Lucky 443→2053 端口映射）
+  ↓  Lucky 反向代理转发
+http://192.168.33.100:3335（宿主机内网端口）
+  ↓  VMware NAT 端口转发
+http://192.168.100.101:335（目标虚拟机服务端口）
+</code></pre>
+<h2>三、分步实施步骤</h2>
+<h3>1. VMware NAT 端口转发配置</h3>
+<p><strong>目标</strong>：建立宿主机与虚拟机的端口映射关系</p>
+<ol>
+<li>打开 VMware → 顶部菜单栏 <strong>编辑</strong> → <strong>虚拟网络编辑器</strong></li>
+<li>选择 <strong>VMnet8（NAT模式）</strong> → 点击 <strong>NAT设置</strong> → 进入 <strong>端口转发</strong> 界面</li>
+<li>添加端口转发规则，示例配置如下：
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>服务名称</th>
+<th>宿主机端口</th>
+<th>虚拟机地址与端口</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Docker</td>
+<td>9000</td>
+<td>192.168.100.102:9000</td>
+</tr>
+<tr>
+<td>HydroOJ</td>
+<td>8081</td>
+<td>192.168.100.103:80</td>
+</tr>
+<tr>
+<td>RayOJ</td>
+<td>8080</td>
+<td>192.168.100.104:80</td>
+</tr>
+<tr>
+<td>WebServer</td>
+<td>3335</td>
+<td>192.168.100.101:335</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+</li>
+<li>保存配置并重启 VMware 网络服务</li>
+</ol>
+<h3>2. Win10 宿主机防火墙入站规则配置</h3>
+<p><strong>目标</strong>：放行外网访问的端口流量</p>
+<ol>
+<li>以管理员身份运行 <strong>CMD</strong>，执行命令 <code class="notranslate">wf.msc</code> 打开 <strong>高级安全 Windows Defender 防火墙</strong></li>
+<li>左侧导航栏选择 <strong>入站规则</strong> → 右侧点击 <strong>新建规则</strong></li>
+<li>规则类型选择 <strong>端口</strong> → 协议选择 <strong>TCP</strong> → 勾选 <strong>特定本地端口</strong>，输入需放行端口：<strong><code class="notranslate">443,2053,8080,8081,9000,3335</code></strong></li>
+<li>选择 <strong>允许连接</strong> → 勾选 <strong>域、专用、公网</strong> → 命名规则后完成创建</li>
+</ol>
+<h3>3. 路由器 ACL 规则配置（以 iKuai 为例）</h3>
+<p><strong>目标</strong>：精细化管控 IPv6 流量，仅允许指定端口与宿主机的访问</p>
+<h4>3.1 配置 IPv6 总阻断规则（优先级高）</h4>
+<ol>
+<li>登录 iKuai 管理后台 → <strong>安全设置</strong> → <strong>ACL规则</strong> → <strong>添加规则</strong></li>
+<li>规则参数配置：
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>配置项</th>
+<th>参数值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>协议栈</td>
+<td>IPv6</td>
+</tr>
+<tr>
+<td>协议</td>
+<td>任意</td>
+</tr>
+<tr>
+<td>动作</td>
+<td>阻断</td>
+</tr>
+<tr>
+<td>方向</td>
+<td>转发</td>
+</tr>
+<tr>
+<td>连接方向匹配</td>
+<td>原始方向</td>
+</tr>
+<tr>
+<td>目的地址</td>
+<td></td>
+</tr>
+<tr>
+<td>进接口</td>
+<td>Wan1</td>
+</tr>
+<tr>
+<td>出接口</td>
+<td>Lan1</td>
+</tr>
+<tr>
+<td>周期</td>
+<td>全时段</td>
+</tr>
+<tr>
+<td>备注</td>
+<td>阻断所有 IPv6 访问</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+</li>
+</ol>
+<h4>3.2 配置 IPv6 端口放行规则（优先级高于阻断规则）</h4>
+<ol>
+<li>新建 ACL 规则，参数配置：
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>配置项</th>
+<th>参数值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>协议栈</td>
+<td>IPv6</td>
+</tr>
+<tr>
+<td>协议</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>动作</td>
+<td>允许</td>
+</tr>
+<tr>
+<td>方向</td>
+<td>转发</td>
+</tr>
+<tr>
+<td>连接方向匹配</td>
+<td>关闭</td>
+</tr>
+<tr>
+<td>目的地址</td>
+<td></td>
+</tr>
+<tr>
+<td>后缀匹配</td>
+<td>开启</td>
+</tr>
+<tr>
+<td>匹配内容</td>
+<td><code class="notranslate">::911/::fff</code>、<br><code class="notranslate">::25df:XXXX:XXXX:XXXX/::ffff:ffff:ffff:ffff</code></td>
+</tr>
+<tr>
+<td>目的端口</td>
+<td>443,2053</td>
+</tr>
+<tr>
+<td>进接口</td>
+<td>Wan1</td>
+</tr>
+<tr>
+<td>出接口</td>
+<td>Lan1</td>
+</tr>
+<tr>
+<td>周期</td>
+<td>全时段</td>
+</tr>
+<tr>
+<td>备注</td>
+<td>允许 IPv6 访问</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+</li>
+</ol>
+<h3>4. Lucky 工具配置（DDNS + 反向代理）</h3>
+<p><strong>前置条件</strong>：宿主机已安装 Lucky 工具（下载地址：<a href="https://lucky666.cn%EF%BC%89" rel="nofollow">https://lucky666.cn）</a></p>
+<h4>4.1 动态域名（DDNS）配置</h4>
+<p><strong>目标</strong>：将域名与宿主机公网IPv6地址绑定</p>
+<ol>
+<li>
+<p>打开 Lucky 管理界面 → 进入 <strong>动态域名</strong> 模块</p>
+</li>
+<li>
+<p>添加两条 AAAA 类型记录（IPv6地址专用）：</p>
+<p>记录1：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>配置项</th>
+<th>参数值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>记录名</td>
+<td><code class="notranslate">xds.net</code></td>
+</tr>
+<tr>
+<td>同步开关</td>
+<td>开启</td>
+</tr>
+<tr>
+<td>记录类型</td>
+<td>AAAA（IPV6）</td>
+</tr>
+<tr>
+<td>TTL</td>
+<td>自动</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p>记录2（泛域名）：</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>配置项</th>
+<th>参数值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>记录名</td>
+<td><code class="notranslate">*.vm.xds.net</code></td>
+</tr>
+<tr>
+<td>同步开关</td>
+<td>开启</td>
+</tr>
+<tr>
+<td>记录类型</td>
+<td>AAAA（IPV6）</td>
+</tr>
+<tr>
+<td>TTL</td>
+<td>自动</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+</li>
+</ol>
+<h4>4.2 Web 反向代理配置</h4>
+<p><strong>目标</strong>：实现 443 端口到 2053 端口的映射，以及域名到宿主机内网的转发</p>
+<h5>4.2.1 端口 2053 代理规则（核心转发规则）</h5>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>配置项</th>
+<th>参数值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>规则名称</td>
+<td>Web_Proxy_2053</td>
+</tr>
+<tr>
+<td>监听类型</td>
+<td>IPv6</td>
+</tr>
+<tr>
+<td>监听端口</td>
+<td><strong>2053</strong></td>
+</tr>
+<tr>
+<td>防火墙自动放行</td>
+<td>开启</td>
+</tr>
+<tr>
+<td>TLS</td>
+<td>启用</td>
+</tr>
+<tr>
+<td>子规则名称</td>
+<td>Web</td>
+</tr>
+<tr>
+<td>服务类型</td>
+<td>反向代理</td>
+</tr>
+<tr>
+<td>前端地址</td>
+<td>web.vm.xds.net</td>
+</tr>
+<tr>
+<td>后端地址</td>
+<td><a href="http://192.168.33.100:3335" rel="nofollow">http://192.168.33.100:3335</a></td>
+</tr>
+<tr>
+<td>忽略后端TLS证书验证</td>
+<td>是</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h5>4.2.2 端口 443 代理规则（无端口访问适配）</h5>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>配置项</th>
+<th>参数值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>规则名称</td>
+<td>Web_Proxy_443</td>
+</tr>
+<tr>
+<td>监听类型</td>
+<td>IPv6</td>
+</tr>
+<tr>
+<td>监听端口</td>
+<td><strong>443</strong></td>
+</tr>
+<tr>
+<td>防火墙自动放行</td>
+<td>开启</td>
+</tr>
+<tr>
+<td>TLS</td>
+<td>启用</td>
+</tr>
+<tr>
+<td>子规则名称</td>
+<td>Web</td>
+</tr>
+<tr>
+<td>服务类型</td>
+<td>反向代理</td>
+</tr>
+<tr>
+<td>前端地址</td>
+<td>web.vm.xds.net</td>
+</tr>
+<tr>
+<td>后端地址</td>
+<td><a href="https://web.vm.xds.net:2053" rel="nofollow">https://web.vm.xds.net:2053</a></td>
+</tr>
+<tr>
+<td>忽略后端TLS证书验证</td>
+<td>是</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h3>5. 宿主机 IPv6 到 IPv4 端口转发配置</h3>
+<p><strong>目标</strong>：实现 IPv6 公网请求到 IPv4 内网的转发</p>
+<ol>
+<li>以 <strong>管理员身份</strong> 打开 PowerShell/CMD</li>
+<li>执行 <code class="notranslate">netsh interface portproxy</code> 命令添加转发规则（以下命令每次只能执行一条，且要退出360卫士才能执行命令）：
+<div class="highlight highlight-source-batchfile"><pre class="notranslate"><span class="pl-k">netsh</span> interface portproxy add v6tov4 listenaddress=240e:XXXX:XXXX:XXXX::911 listenport=<span class="pl-c1">9000</span> connectaddress=192.168.100.102 connectport=<span class="pl-c1">9000</span>
+<span class="pl-k">netsh</span> interface portproxy add v6tov4 listenaddress=240e:XXXX:XXXX:XXXX::911 listenport=<span class="pl-c1">8081</span> connectaddress=192.168.100.103 connectport=<span class="pl-c1">80</span>
+<span class="pl-k">netsh</span> interface portproxy add v6tov4 listenaddress=240e:XXXX:XXXX:XXXX::911 listenport=<span class="pl-c1">8080</span> connectaddress=192.168.100.104 connectport=<span class="pl-c1">80</span></pre></div>
+</li>
+<li>命令补充说明：
+<ul>
+<li>查看所有规则：<code class="notranslate">netsh interface portproxy show all</code></li>
+<li>清除所有规则：<code class="notranslate">netsh interface portproxy reset</code></li>
+<li>批量配置：编写 <code class="notranslate">.bat</code> 脚本批量执行命令，提升效率</li>
+</ul>
+</li>
+</ol>
+<h2>四、验证与排障</h2>
+<ol>
+<li><strong>内网验证</strong>：宿主机访问 <code class="notranslate">http://192.168.33.100:3335</code>，确认是否能正常跳转至虚拟机服务</li>
+<li><strong>IPv6 验证</strong>：外网设备通过 <code class="notranslate">https://[宿主机公网IPv6]:3335</code> 访问，检查连通性</li>
+<li><strong>域名验证</strong>：外网设备访问 <code class="notranslate">https://web.vm.xds.net</code>，确认是否无需端口即可访问</li>
+<li><strong>排障要点</strong>
+<ul>
+<li>检查 VMware 端口转发规则是否生效</li>
+<li>确认防火墙入站规则与路由器 ACL 规则无冲突</li>
+<li>验证 Lucky 域名解析状态与反向代理配置</li>
+</ul>
+</li>
+</ol></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://donsaxiao.github.io">动赛博客</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if(""!=""){
+    var startSite=new Date("");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","donsaxiao/donsaxiao.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const createClipboardHTML = (codeContent, additionalClasses = '') => `
+        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
+        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
+            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
+                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="${IconList["copy"]}"></path></svg>
+                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="${IconList["check"]}"></path></svg>
+            </clipboard-copy>
+            <div class="copy-feedback">Copied!</div>
+        </div>
+    `;
+
+    const handleCodeElements = (selector = '') => {
+        document.querySelectorAll(selector).forEach(codeElement => {
+            const codeContent = codeElement.innerHTML;
+            const newStructure = document.createElement('div');
+            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
+            newStructure.innerHTML = createClipboardHTML(codeContent);
+
+            const parentElement = codeElement.parentElement;
+            if (selector.includes('highlight')) {
+                parentElement.insertBefore(newStructure, codeElement.nextSibling);
+                parentElement.removeChild(codeElement);
+            } else {
+                parentElement.parentElement.replaceChild(newStructure, parentElement);
+            }
+        });
+    };
+
+    handleCodeElements('pre.notranslate > code.notranslate');
+    handleCodeElements('div.highlight > pre.notranslate');
+
+    let currentFeedback = null;
+    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
+        copyButton.addEventListener('click', () => {
+            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const copyIcon = copyButton.querySelector('.octicon-copy');
+            const checkIcon = copyButton.querySelector('.octicon-check');
+            const copyFeedback = copyButton.nextElementSibling;
+
+            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
+            currentFeedback = copyFeedback;
+
+            copyIcon.classList.add('d-none');
+            checkIcon.classList.remove('d-none');
+            copyFeedback.style.display = 'block';
+            copyButton.style.borderColor = 'var(--color-success-fg)';
+
+            setTimeout(() => {
+                copyIcon.classList.remove('d-none');
+                checkIcon.classList.add('d-none');
+                copyFeedback.style.display = 'none';
+                copyButton.style.borderColor = '';
+            }, 2000);
+        });
+    });
+});
+
+</script>
+
+
+</html>
