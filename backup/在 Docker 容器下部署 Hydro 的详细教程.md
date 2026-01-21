@@ -265,7 +265,7 @@ Hydro的Docker部署包含三个核心服务：
 
 ### 首次使用需要注意以下事项： 
 默认账号配置 系统会自动注册一个测评账号： 
-• 用户名：evaluator 
+• 用户名：judge 
 • 密码：examplepassword  
 
 ### 重要提醒：
