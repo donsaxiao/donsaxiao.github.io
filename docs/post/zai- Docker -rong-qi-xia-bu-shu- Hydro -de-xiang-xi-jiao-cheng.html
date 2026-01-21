@@ -320,6 +320,34 @@ Error response from daemon: failed to set up container networking: dri
 <h3>重要提醒：</h3>
 <p><strong>请务必及时修改默认密码</strong>，并同步更新 evaluator/evaluator.yaml 配置文件中的密码设置，否则可能导致测评功能异常。</p>
 <hr>
+<h2>误操作 UID 为 2 的用户为超级管理员的解决办法：</h2>
+<p>如果误操作用 hydrooj cli user setSuperAdmin 2 将 UID 为 2 的用户（这个用户就是：judge）设置为超级管理员。可以使用以下办法取消并设置judge用户正确的权限：</p>
+<p>针对您误将 UID 为 2 的测评账号 (judge) 设置为超级管理员的情况，可以按照以下步骤进行处理。</p>
+<h3>🔑 第一步：取消超级管理员权限</h3>
+<p>您可以通过 Hydro CLI 命令行工具，将该用户的权限重置为普通用户权限（即默认权限）。</p>
+<p>在终端中执行以下命令：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">hydrooj cli user setPriv 2 1</pre></div>
+<ul>
+<li><strong>命令解释</strong>：<code class="notranslate">setPriv</code> 用于设置用户权限。参数 <code class="notranslate">2</code> 是用户的 UID，参数 <code class="notranslate">1</code> 是普通用户的默认权限值（<code class="notranslate">PRIV_DEFAULT</code>）。</li>
+<li><strong>效果</strong>：执行后，该账号将不再拥有任何管理员特权，变回一个刚注册的普通用户。</li>
+</ul>
+<h3>⚙️ 第二步：为测评账号设置正确权限</h3>
+<p>取消超级管理员权限后，该账号目前没有任何特殊权限。为了让它能作为评测机正常工作，您需要赋予它专门的评测权限。</p>
+<p><strong>正确权限：<code class="notranslate">PRIV_JUDGE</code></strong></p>
+<p>您需要通过 CLI 命令，将 <code class="notranslate">PRIV_JUDGE</code> 权限赋予该账号。</p>
+<p>在终端中执行以下命令：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">hydrooj cli user setJudge 2</pre></div>
+<ul>
+<li><strong>命令解释</strong>：<code class="notranslate">setJudge</code> 是一个便捷命令，专门用于将指定用户设置为评测账号，它会自动为其添加 <code class="notranslate">PRIV_JUDGE</code> 权限。</li>
+<li><strong>效果</strong>：该账号现在拥有了评测机连接和工作的所有必要权限，但没有其他管理员权限，这是最安全的配置。</li>
+</ul>
+<h4>📌 总结</h4>
+<p>通过以上两个步骤，您已经成功将该测评账号恢复到了正确的配置状态：</p>
+<ol>
+<li>先用 <code class="notranslate">setPriv 2 1</code> 移除了过高的超级管理员权限。</li>
+<li>再用 <code class="notranslate">setJudge 2</code> 添加了恰到好处的评测机专用权限。</li>
+</ol>
+<hr>
 <p>以上内容是 Donsa 原创，请尊重版权！</p></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
