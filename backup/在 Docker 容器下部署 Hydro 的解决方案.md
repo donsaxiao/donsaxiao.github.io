@@ -18,7 +18,7 @@ sudo chown -R donsa:donsa /hydro
 *(注意：请将 `donsa:donsa` 替换为你实际的用户名，冒号前面是用户，后面是组)*
 
 ### 3. 克隆项目代码
-现在进入 `/hydro` 目录并按照你截图中的命令下载代码：
+现在进入 `/hydro` 目录并执行命令克隆Hydro项目到本地：
 
 ```bash
 cd /hydro
@@ -32,12 +32,14 @@ git clone https://gitcode.com/gh_mirrors/hy/Hydro.git
 cd Hydro/install/docker
 ```
 
-### 5. 启动服务
-最后，执行启动命令：
+### 5. 启动 Docker 服务
+执行启动命令：
 
 ```bash
 docker-compose up -d
 ```
+
+这个过程会根据网络情况自动搭建，大约需要5-30分钟，全程无需人工干预。
 
 -------------------------------------------------------------------------------------------------------
 

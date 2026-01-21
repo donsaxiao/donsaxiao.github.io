@@ -97,15 +97,16 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <div class="highlight highlight-source-shell"><pre class="notranslate">sudo chown -R donsa:donsa /hydro</pre></div>
 <p><em>(注意：请将 <code class="notranslate">donsa:donsa</code> 替换为你实际的用户名，冒号前面是用户，后面是组)</em></p>
 <h3>3. 克隆项目代码</h3>
-<p>现在进入 <code class="notranslate">/hydro</code> 目录并按照你截图中的命令下载代码：</p>
+<p>现在进入 <code class="notranslate">/hydro</code> 目录并执行命令克隆Hydro项目到本地：</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c1">cd</span> /hydro
 git clone https://gitcode.com/gh_mirrors/hy/Hydro.git</pre></div>
 <h3>4. 进入安装目录</h3>
 <p>下载完成后，进入 Docker 安装目录：</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c1">cd</span> Hydro/install/docker</pre></div>
-<h3>5. 启动服务</h3>
-<p>最后，执行启动命令：</p>
+<h3>5. 启动 Docker 服务</h3>
+<p>执行启动命令：</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">docker-compose up -d</pre></div>
+<p>这个过程会根据网络情况自动搭建，大约需要5-30分钟，全程无需人工干预。</p>
 <hr>
 <h3>💡 补充说明</h3>
 <ul>
