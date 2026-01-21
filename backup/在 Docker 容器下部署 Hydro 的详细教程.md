@@ -274,9 +274,8 @@ Hydro的Docker部署包含三个核心服务：
 ---
 
 ## 误操作 UID 为 2 的用户为超级管理员的解决办法：
-如果误操作用 hydrooj cli user setSuperAdmin 2 将 UID 为 2 的用户（这个用户就是：judge）设置为超级管理员。可以使用以下办法取消并设置judge用户正确的权限：
 
-针对您误将 UID 为 2 的测评账号 (judge) 设置为超级管理员的情况，可以按照以下步骤进行处理。
+如果误操作使用了 `hydrooj cli user setSuperAdmin 2` 将 UID 为 2 的用户（这个用户就是：judge）设置为超级管理员。可以按照以下步骤进行处理，以取消并设置 judge 用户正确的权限：
 
 ### 🔑 第一步：取消超级管理员权限
 

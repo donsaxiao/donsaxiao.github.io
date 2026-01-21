@@ -321,8 +321,7 @@ Error response from daemon: failed to set up container networking: dri
 <p><strong>请务必及时修改默认密码</strong>，并同步更新 evaluator/evaluator.yaml 配置文件中的密码设置，否则可能导致测评功能异常。</p>
 <hr>
 <h2>误操作 UID 为 2 的用户为超级管理员的解决办法：</h2>
-<p>如果误操作用 hydrooj cli user setSuperAdmin 2 将 UID 为 2 的用户（这个用户就是：judge）设置为超级管理员。可以使用以下办法取消并设置judge用户正确的权限：</p>
-<p>针对您误将 UID 为 2 的测评账号 (judge) 设置为超级管理员的情况，可以按照以下步骤进行处理。</p>
+<p>如果误操作使用了 <code class="notranslate">hydrooj cli user setSuperAdmin 2</code> 将 UID 为 2 的用户（这个用户就是：judge）设置为超级管理员。可以按照以下步骤进行处理，以取消并设置 judge 用户正确的权限：</p>
 <h3>🔑 第一步：取消超级管理员权限</h3>
 <p>您可以通过 Hydro CLI 命令行工具，将该用户的权限重置为普通用户权限（即默认权限）。</p>
 <p>在终端中执行以下命令：</p>
