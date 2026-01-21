@@ -196,10 +196,11 @@ Error response from daemon: failed to set up container networking: dri
 进入容器后，你会看到命令行提示符变成了类似 <code class="notranslate">/app #</code>。此时直接执行初始化命令：</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">hydrooj cli user setSuperAdmin 2</pre></div>
 <ul>
-<li><strong>注意</strong>：这里的 <code class="notranslate">2</code> 是指用户的 ID。但值得注意的是在 Docker 容器下部署的 Hydro，用户 ID 往往是 <code class="notranslate">3</code> 而不是 <code class="notranslate">2</code>。因为用户 ID 2 是系统内已经存在的 judge，请改为：
+<li><strong>注意</strong>：这里的 <code class="notranslate">2</code> 是指用户的 ID。但值得注意的是在 Docker 容器下部署的 Hydro，用户 ID 往往是 <code class="notranslate">3</code> 而不是 <code class="notranslate">2</code>。因为用户 ID 2 是系统内已经存在的 judge 用户，请改为：
 <div class="highlight highlight-source-shell"><pre class="notranslate">hydrooj cli user setSuperAdmin 3</pre></div>
 </li>
 </ul>
+<h3>如果误操作将 UID 为 2 的 judge 用户设置为超级管理员，请参考本文最后【 <strong>误操作 UID 为 2 的用户为超级管理员的解决办法</strong>】</h3>
 </li>
 </ol>
 <hr>

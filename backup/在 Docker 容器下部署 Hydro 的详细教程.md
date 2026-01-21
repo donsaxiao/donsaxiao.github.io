@@ -151,10 +151,11 @@ sudo kill -9 <PID>
     ```bash
     hydrooj cli user setSuperAdmin 2
     ```
-    *   **注意**：这里的 `2` 是指用户的 ID。但值得注意的是在 Docker 容器下部署的 Hydro，用户 ID 往往是 `3` 而不是 `2`。因为用户 ID 2 是系统内已经存在的 judge，请改为：
+    *   **注意**：这里的 `2` 是指用户的 ID。但值得注意的是在 Docker 容器下部署的 Hydro，用户 ID 往往是 `3` 而不是 `2`。因为用户 ID 2 是系统内已经存在的 judge 用户，请改为：
         ```bash
         hydrooj cli user setSuperAdmin 3
         ```
+    ###  如果误操作将 UID 为 2 的 judge 用户设置为超级管理员，请参考本文最后【 **误操作 UID 为 2 的用户为超级管理员的解决办法**】
 
 ---
 
