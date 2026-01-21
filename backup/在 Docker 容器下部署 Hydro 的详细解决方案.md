@@ -224,4 +224,52 @@ docker exec oj-backend hydrooj cli user setSuperAdmin 3
 </html>
 
 ---
-以上内容是 Donsa 原创，请注意版权，复制时必须保留我的版权声明！
+
+## Hydro 服务架构解析
+Hydro的Docker部署包含三个核心服务： 
+
+### 1. 后端服务 (oj-backend) 
+• 基于Node.js 22构建 
+• 运行在8888端口 
+• 提供核心API功能
+
+### 2. 测评服务 (oj-evaluator) 
+• 包含完整的编译器环境 
+• 支持多种编程语言 
+• 提供代码评测能力  
+
+### 3. 数据库服务 (oj-mongo) 
+• 使用MongoDB 7数据库 
+• 存储系统所有数据
+
+### 配置详解与优化
+ **端口映射配置**：默认配置中将主机的80端口映射到容器的8888端口。如需修改端口，请编辑 docker-compose.yml 文件中的端口映射设置。 
+
+### 测评服务编译器支持
+测评服务默认安装了12种编译器： 
+1. GCC (C语言编译器) 
+2. Python3 (Python解释器) 
+3. G++ (C++编译器) 
+4. Free Pascal编译器 
+5. OpenJDK 17 (Java开发工具包) 
+6. PHP CLI (PHP命令行接口) 
+7. Rust编译器 
+8. Glasgow Haskell编译器 
+9. JavaScriptCore 
+10. Go语言 
+11. Ruby 
+12. Mono (.NET框架)  
+
+### 系统访问与初始配置
+部署完成后，通过浏览器访问 http://localhost:8088 即可进入Hydro系统。
+
+### 首次使用需要注意以下事项： 
+默认账号配置 系统会自动注册一个测评账号： 
+• 用户名：evaluator 
+• 密码：examplepassword  
+
+### 重要提醒：
+ **请务必及时修改默认密码**，并同步更新 evaluator/evaluator.yaml 配置文件中的密码设置，否则可能导致测评功能异常。
+
+---
+以上内容是 Donsa 原创，请尊重版权！

@@ -280,7 +280,47 @@ Error response from daemon: failed to set up container networking: dri
 
 
 <hr>
-<p>以上内容是 Donsa 原创，请注意版权，复制时必须保留我的版权声明！</p></div>
+<h2>Hydro 服务架构解析</h2>
+<p>Hydro的Docker部署包含三个核心服务：</p>
+<h3>1. 后端服务 (oj-backend)</h3>
+<p>• 基于Node.js 22构建<br>
+• 运行在8888端口<br>
+• 提供核心API功能</p>
+<h3>2. 测评服务 (oj-evaluator)</h3>
+<p>• 包含完整的编译器环境<br>
+• 支持多种编程语言<br>
+• 提供代码评测能力</p>
+<h3>3. 数据库服务 (oj-mongo)</h3>
+<p>• 使用MongoDB 7数据库<br>
+• 存储系统所有数据</p>
+<h3>配置详解与优化</h3>
+<p><strong>端口映射配置</strong>：默认配置中将主机的80端口映射到容器的8888端口。如需修改端口，请编辑 docker-compose.yml 文件中的端口映射设置。</p>
+<h3>测评服务编译器支持</h3>
+<p>测评服务默认安装了12种编译器：</p>
+<ol>
+<li>GCC (C语言编译器)</li>
+<li>Python3 (Python解释器)</li>
+<li>G++ (C++编译器)</li>
+<li>Free Pascal编译器</li>
+<li>OpenJDK 17 (Java开发工具包)</li>
+<li>PHP CLI (PHP命令行接口)</li>
+<li>Rust编译器</li>
+<li>Glasgow Haskell编译器</li>
+<li>JavaScriptCore</li>
+<li>Go语言</li>
+<li>Ruby</li>
+<li>Mono (.NET框架)</li>
+</ol>
+<h3>系统访问与初始配置</h3>
+<p>部署完成后，通过浏览器访问 <a href="http://localhost:8088" rel="nofollow">http://localhost:8088</a> 即可进入Hydro系统。</p>
+<h3>首次使用需要注意以下事项：</h3>
+<p>默认账号配置 系统会自动注册一个测评账号：<br>
+• 用户名：evaluator<br>
+• 密码：examplepassword</p>
+<h3>重要提醒：</h3>
+<p><strong>请务必及时修改默认密码</strong>，并同步更新 evaluator/evaluator.yaml 配置文件中的密码设置，否则可能导致测评功能异常。</p>
+<hr>
+<p>以上内容是 Donsa 原创，请尊重版权！</p></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
