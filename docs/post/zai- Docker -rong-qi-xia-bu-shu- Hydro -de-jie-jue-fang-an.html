@@ -120,7 +120,7 @@ git clone https://gitcode.com/gh_mirrors/hy/Hydro.git</pre></div>
 Error response from daemon: failed to set up container networking: driver failed programming external connectivity on endpoint oj-backend (8a61cca3bd252522c3139b1b8480e36f47a03f5125c968fa1f307c10ab3b3459): failed to bind host port for 0.0.0.0:80:172.19.0.3:8888/tcp: address already in use
 </code></pre>
 <p>这说明你遇到的问题是 <strong>端口冲突</strong>，具体表现为 <code class="notranslate">oj-backend</code> 容器尝试绑定主机的 80 端口时失败，提示 <code class="notranslate">address already in use</code>。虽然你已经执行了 <code class="notranslate">docker-compose down</code> 和网络清理，但系统中仍有残留的进程或服务占用了 80 端口。</p>
-<h3>解决方案</h3>
+<h3>解决方法</h3>
 <h4>1. 查找并终止占用 80 端口的进程</h4>
 <p>运行以下命令查看是哪个进程在占用 80 端口：</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">sudo lsof -i :80</pre></div>
@@ -144,17 +144,10 @@ Error response from daemon: failed to set up container networking: dri
     <span class="pl-ent">ports</span>:
       - <span class="pl-s"><span class="pl-pds">"</span>8088:8888<span class="pl-pds">"</span></span>  <span class="pl-c"><span class="pl-c">#</span> 原来是 "80:8888"</span></pre></div>
 </li>
-<li>保存并退出（<code class="notranslate">Ctrl+O</code> → 回车 → <code class="notranslate">Ctrl+X</code>），然后重新启动 Hydro：
+<li>修改并保存和退出（<code class="notranslate">Ctrl+O</code> → 回车 → <code class="notranslate">Ctrl+X</code>→ 输入 Y 保存 → 回车），然后重新启动 Docker 服务（安装 Hydro）：
 <div class="highlight highlight-source-shell"><pre class="notranslate">docker-compose up -d</pre></div>
 </li>
 </ol>
-<h4>3. 重启 Docker 服务（如果上述方法无效）</h4>
-<p>有时候 Docker 的内部代理进程没有完全释放端口，可以尝试重启 Docker 服务：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">sudo systemctl restart docker</pre></div>
-<h3>✅ 验证是否成功</h3>
-<p>重新启动后，运行以下命令查看容器状态：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">docker-compose ps</pre></div>
-<p>如果 <code class="notranslate">oj-backend</code>、<code class="notranslate">oj-mongo</code>、<code class="notranslate">oj-judge</code> 都显示 <code class="notranslate">Running</code>，说明 Hydro 启动成功。</p>
 <h3>📌 预防措施</h3>
 <ul>
 <li><strong>避免端口冲突</strong>：如果你的服务器上还有其他 Web 服务（如 Nginx），建议修改 Hydro 的端口映射。可以在 <code class="notranslate">docker-compose.yml</code> 文件中将 <code class="notranslate">80:8888</code> 改为其他未被占用的端口，例如 <code class="notranslate">8080:8888</code>。</li>
@@ -162,7 +155,7 @@ Error response from daemon: failed to set up container networking: dri
 </ul>
 <h3>📌 最后提醒</h3>
 <ul>
-<li>如果你选择 ** 修改端口Hydro端口为8088 ** ，在访问 Hydro 时需要加上端口号（例如：<code class="notranslate">http://你的服务器IP:8088</code>）。</li>
+<li>如果你选择 <strong>修改 Hydro 端口为 8088</strong> ，在访问 Hydro 时需要加上端口号（例如：<code class="notranslate">http://你的服务器IP:8088</code>）。</li>
 <li>上内容是解决端口被占用的解决方案，如果端口未占用，可以跳过，直接执行下面的步骤。</li>
 </ul>
 <hr>

@@ -55,7 +55,7 @@ Error response from daemon: failed to set up container networking: dri
 ```
 这说明你遇到的问题是 **端口冲突**，具体表现为 `oj-backend` 容器尝试绑定主机的 80 端口时失败，提示 `address already in use`。虽然你已经执行了 `docker-compose down` 和网络清理，但系统中仍有残留的进程或服务占用了 80 端口。
 
-### 解决方案
+### 解决方法
 
 #### 1. 查找并终止占用 80 端口的进程
 运行以下命令查看是哪个进程在占用 80 端口：
@@ -89,30 +89,17 @@ sudo kill -9 <PID>
         ports:
           - "8088:8888"  # 原来是 "80:8888"
     ```
-4.  保存并退出（`Ctrl+O` → 回车 → `Ctrl+X`），然后重新启动 Hydro：
+4.  修改并保存和退出（`Ctrl+O` → 回车 → `Ctrl+X`→ 输入 Y 保存 → 回车），然后重新启动 Docker 服务（安装 Hydro）：
     ```bash
     docker-compose up -d
     ```
-
-#### 3. 重启 Docker 服务（如果上述方法无效）
-有时候 Docker 的内部代理进程没有完全释放端口，可以尝试重启 Docker 服务：
-```bash
-sudo systemctl restart docker
-```
-
-### ✅ 验证是否成功
-重新启动后，运行以下命令查看容器状态：
-```bash
-docker-compose ps
-```
-如果 `oj-backend`、`oj-mongo`、`oj-judge` 都显示 `Running`，说明 Hydro 启动成功。
 
 ### 📌 预防措施
 - **避免端口冲突**：如果你的服务器上还有其他 Web 服务（如 Nginx），建议修改 Hydro 的端口映射。可以在 `docker-compose.yml` 文件中将 `80:8888` 改为其他未被占用的端口，例如 `8080:8888`。
 - **定期清理**：使用 `docker system prune -a` 可以定期清理所有未使用的容器、网络、镜像和构建缓存，避免残留资源导致冲突。
 
 ### 📌 最后提醒
-- 如果你选择 ** 修改端口Hydro端口为8088 ** ，在访问 Hydro 时需要加上端口号（例如：`http://你的服务器IP:8088`）。
+- 如果你选择 **修改 Hydro 端口为 8088** ，在访问 Hydro 时需要加上端口号（例如：`http://你的服务器IP:8088`）。
 - 上内容是解决端口被占用的解决方案，如果端口未占用，可以跳过，直接执行下面的步骤。
 
 -------------------------------------------------------------------------------------------------------
