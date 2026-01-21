@@ -10,13 +10,9 @@
         let theme = localStorage.getItem("meek_theme") || "light";
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
-<meta name="description" content="
-### 1. 创建目标目录
-首先，你需要创建 `/hydro` 文件夹。">
+<meta name="description" content="Hydro 作为新一代高效强大的信息学在线测评系统，通过 Docker 容器化部署能够实现快速安装和环境隔离。">
 <meta property="og:title" content="在 Docker 容器下部署 Hydro 的详细解决方案">
-<meta property="og:description" content="
-### 1. 创建目标目录
-首先，你需要创建 `/hydro` 文件夹。">
+<meta property="og:description" content="Hydro 作为新一代高效强大的信息学在线测评系统，通过 Docker 容器化部署能够实现快速安装和环境隔离。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://donsaxiao.github.io/post/zai-%20Docker%20-rong-qi-xia-bu-shu-%20Hydro%20-de-xiang-xi-jie-jue-fang-an.html">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/96248528?v=4">
@@ -87,7 +83,17 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
 </div>
     <div id="content">
-<div class="markdown-body" id="postBody"><h3>1. 创建目标目录</h3>
+<div class="markdown-body" id="postBody"><p>Hydro 作为新一代高效强大的信息学在线测评系统，通过 Docker 容器化部署能够实现快速安装和环境隔离。本文将详细介绍Hydro 的 Docker 部署方案，帮助你在容器化环境下实现高效运行（本文同样适合在 1panel 下部署）。</p>
+<h3>为什么选择 Docker 部署 Hydro？</h3>
+<p>Docker 部署 Hydro 具有多重优势：环境隔离确保系统稳定性，快速部署减少配置时间，资源隔离提高运行效率。特别适合需要快速搭建测评环境的教育机构和竞赛组织者。</p>
+<h3>准备工作与环境要求</h3>
+<p>在开始部署前，请确保您的系统满足以下条件：<br>
+• Docker环境：已安装Docker和Docker Compose<br>
+• Linux系统：推荐使用Linux操作系统<br>
+• 磁盘空间：至少2GB可用空间<br>
+• 网络连接：稳定的网络连接用于下载依赖</p>
+<h2>快速安装步骤详解</h2>
+<h3>1. 创建目标目录</h3>
 <p>首先，你需要创建 <code class="notranslate">/hydro</code> 文件夹。因为这是在根目录下创建文件夹，需要管理员权限：</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">sudo mkdir /hydro</pre></div>
 <p><em>(系统可能会要求你输入密码，输入后按回车即可)</em></p>
@@ -272,7 +278,9 @@ Error response from daemon: failed to set up container networking: dri
 <p>所以，下次你想“重启服务”时，只需敲下 <code class="notranslate">docker restart oj-backend</code> 即可。</p>
 
 
-</div>
+
+<hr>
+<p>以上内容是 Donsa 原创，请注意版权，复制时必须保留我的版权声明！</p></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
