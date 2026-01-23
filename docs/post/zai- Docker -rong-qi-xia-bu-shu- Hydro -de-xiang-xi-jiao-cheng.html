@@ -119,7 +119,7 @@ git clone https://github.com/hydro-dev/Hydro.git </pre></div>
 <li>这个过程会根据网络情况自动搭建，大约需要5-30分钟，全程无需人工干预。</li>
 <li>命令执行完成后运行 <code class="notranslate">docker ps -a</code>，当看到所有的容器的状态没有 <code class="notranslate">Exited (x) xxx</code> 就代表 OJ 已经启动成功。</li>
 <li><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji> 注意<br>
-安装过程中，系统会默认注册一个 uid 为 2 的测评账号。<strong>用户名：</strong> <code class="notranslate">judge</code>，<strong>密码：</strong> <code class="notranslate">examplepassword</code>。请务必及时修改密码。修改该账号密码后，还要再修改 <code class="notranslate">judge/judge.yaml</code> 中的 <code class="notranslate">password</code>。<strong>否则可能会无法测评</strong>。</li>
+安装过程中，系统会默认注册一个 uid 为 2 的测评账号。<strong>用户名：</strong> <code class="notranslate">judge</code>，<strong>密码：</strong> <code class="notranslate">examplepassword</code>。请务必及时修改密码。修改该账号密码后，还要再修改 <code class="notranslate">/hydro/Hydro/install/docker/judge/judge.yaml</code> 中的 <code class="notranslate">password</code>。<strong>否则可能会无法测评</strong>。</li>
 <li><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji> 正常情况下你的安装会是顺利的，但不排除会出现<strong>端口被占用</strong>的情况（如下）。</li>
 </ul>
 <hr>
@@ -187,7 +187,7 @@ Error response from daemon: failed to set up container networking: dri
 • <strong>用户名</strong>：<code class="notranslate">judge</code><br>
 • <strong>密码</strong>：<code class="notranslate">examplepassword</code></p>
 <h3>3、重要提醒：</h3>
-<p><strong>请务必及时修改默认密码</strong>，并同步更新 <code class="notranslate">judge/judge.yaml</code> 配置文件中的 <code class="notranslate">password</code> 密码，<strong>否则可能导致测评功能异常。</strong></p>
+<p><strong>请务必及时修改默认密码</strong>，并同步更新 <code class="notranslate">/hydro/Hydro/install/docker/judge/judge.yaml</code> 配置文件中的 <code class="notranslate">password</code> 密码，<strong>否则可能导致测评功能异常。</strong></p>
 <h3>4、特别注意 Ubuntu 和 Docker 部署的 Hydro，操作命令不一样。</h3>
 <p>安装完成后，在浏览器访问 <strong><a href="http://ip:8088" rel="nofollow">http://ip:8088</a></strong> 时，在首页提示如下：<br>
 ■ 在右上角注册一个账号。<br>
@@ -215,7 +215,7 @@ Error response from daemon: failed to set up container networking: dri
 进入容器后，你会看到命令行提示符变成了 <code class="notranslate">#</code>。此时直接执行初始化命令：</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">hydrooj cli user setSuperAdmin 3</pre></div>
 <ul>
-<li><strong>注意</strong>：在安装过程中，系统已经默认注册了一个 uid 为 2 的测评账号。<strong>用户名：</strong> <code class="notranslate">judge</code>，<strong>密码：</strong> <code class="notranslate">examplepassword</code>。请务必及时修改密码。修改该账号密码后，同时还要再修改 <code class="notranslate">judge/judge.yaml</code> 中的 <code class="notranslate">password</code>。<strong>否则可能会无法测评</strong>。</li>
+<li><strong>注意</strong>：在安装过程中，系统已经默认注册了一个 uid 为 2 的测评账号。<strong>用户名：</strong> <code class="notranslate">judge</code>，<strong>密码：</strong> <code class="notranslate">examplepassword</code>。请务必及时修改密码。修改该账号密码后，同时还要再修改 <code class="notranslate">/hydro/Hydro/install/docker/judge/judge.yaml</code> 中的 <code class="notranslate">password</code>。<strong>否则可能会无法测评</strong>。</li>
 </ul>
 <h3>如果误操作将 UID 为 2 的 <code class="notranslate">judge</code> 用户设置为超级管理员，请参考本文最后【 <strong>误操作 UID 为 2 的用户为超级管理员的解决办法</strong>】</h3>
 </li>

@@ -62,7 +62,7 @@ docker-compose up -d
 - 这个过程会根据网络情况自动搭建，大约需要5-30分钟，全程无需人工干预。
 - 命令执行完成后运行 `docker ps -a`，当看到所有的容器的状态没有 `Exited (x) xxx` 就代表 OJ 已经启动成功。
 - ⚠️ 注意
-安装过程中，系统会默认注册一个 uid 为 2 的测评账号。**用户名：** `judge`，**密码：** `examplepassword`。请务必及时修改密码。修改该账号密码后，还要再修改 `judge/judge.yaml` 中的 `password`。**否则可能会无法测评**。
+安装过程中，系统会默认注册一个 uid 为 2 的测评账号。**用户名：** `judge`，**密码：** `examplepassword`。请务必及时修改密码。修改该账号密码后，还要再修改 `/hydro/Hydro/install/docker/judge/judge.yaml` 中的 `password`。**否则可能会无法测评**。
 - ⚠️ 正常情况下你的安装会是顺利的，但不排除会出现**端口被占用**的情况（如下）。
 
 ---
@@ -142,7 +142,7 @@ sudo kill -9 <PID>
 • **密码**：`examplepassword`  
 
 ### 3、重要提醒：
- **请务必及时修改默认密码**，并同步更新 `judge/judge.yaml` 配置文件中的 `password` 密码，**否则可能导致测评功能异常。**
+ **请务必及时修改默认密码**，并同步更新 `/hydro/Hydro/install/docker/judge/judge.yaml` 配置文件中的 `password` 密码，**否则可能导致测评功能异常。**
 
 ###  4、特别注意 Ubuntu 和 Docker 部署的 Hydro，操作命令不一样。
 
@@ -180,7 +180,7 @@ sudo kill -9 <PID>
     ```bash
     hydrooj cli user setSuperAdmin 3
     ```
-    *   **注意**：在安装过程中，系统已经默认注册了一个 uid 为 2 的测评账号。**用户名：** `judge`，**密码：** `examplepassword`。请务必及时修改密码。修改该账号密码后，同时还要再修改 `judge/judge.yaml` 中的 `password`。**否则可能会无法测评**。
+    *   **注意**：在安装过程中，系统已经默认注册了一个 uid 为 2 的测评账号。**用户名：** `judge`，**密码：** `examplepassword`。请务必及时修改密码。修改该账号密码后，同时还要再修改 `/hydro/Hydro/install/docker/judge/judge.yaml` 中的 `password`。**否则可能会无法测评**。
     ###  如果误操作将 UID 为 2 的 `judge` 用户设置为超级管理员，请参考本文最后【 **误操作 UID 为 2 的用户为超级管理员的解决办法**】
 
 ---
