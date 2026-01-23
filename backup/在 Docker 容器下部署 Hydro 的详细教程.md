@@ -20,22 +20,29 @@ sudo mkdir /hydro
 ```
 *(系统可能会要求你输入密码，输入后按回车即可)*
 
-### 2. 修改文件夹权限（关键步骤）
+### 2. 修改文件夹权限（关键步骤，下面2个方法二选一）
 默认情况下，`sudo mkdir` 创建的文件夹属于 `root` 用户。但你日常运行 Docker 或者操作代码通常使用的是普通用户（比如你的 `donsa` 用户）。为了避免后续操作出现“权限被拒绝”的错误，建议将该文件夹的所有者改为你的当前用户。
 
-假设你的用户名是 `donsa`，请运行：
+ **方法2.1 假设你的用户名是 `donsa`，请运行：**
 
 ```bash
 sudo chown -R donsa:donsa /hydro
 ```
 *(注意：请将 `donsa:donsa` 替换为你实际的用户名，冒号前面是用户，后面是组)*
 
+ **方法2.2 也可以用 $USER:$USER 来直接修改文件夹权限**
+
+```bash
+sudo chown -R $USER:$USER /hydro
+```
+*(此命令将/hydro目录的所有权更改为当前用户，避免后续操作出现权限问题。$USER会自动替换为当前用户名)*
+
 ### 3. 克隆项目代码
 现在进入 `/hydro` 目录并执行命令克隆Hydro项目到本地：
 
 ```bash
 cd /hydro
-git clone https://gitcode.com/gh_mirrors/hy/Hydro.git
+git clone https://github.com/hydro-dev/Hydro.git 
 ```
 
 ### 4. 进入安装目录
@@ -52,7 +59,11 @@ cd Hydro/install/docker
 docker-compose up -d
 ```
 
-这个过程会根据网络情况自动搭建，大约需要5-30分钟，全程无需人工干预。
+- 这个过程会根据网络情况自动搭建，大约需要5-30分钟，全程无需人工干预。
+- 命令执行完成后运行 `docker ps -a`，当看到所有的容器的状态没有 `Exited (x) xxx` 就代表 OJ 已经启动成功。
+- ⚠️ 注意
+安装过程中，系统会默认注册一个 uid 为 2 的测评账号。**用户名：** `judge`，**密码：** `examplepassword`。请务必及时修改密码。修改该账号密码后，还要再修改 `judge/judge.yaml` 中的 `password`。**否则可能会无法测评**。
+- ⚠️正常情况下你的安装会是顺利的，但不排除会出现**端口被占用**的情况（如下）。
 
 ---
 
@@ -145,17 +156,17 @@ sudo kill -9 <PID>
     docker exec -it oj-backend sh
     ```
     *   提示：如果报错 `sh` 不可用，可以尝试 `bash`（虽然该镜像通常只包含轻量级的 `sh`）。
-
-2.  **执行命令**
-    进入容器后，你会看到命令行提示符变成了类似 `/app #`。此时直接执行初始化命令：
     ```bash
-    hydrooj cli user setSuperAdmin 2
+    docker exec -it oj-backend bash
     ```
-    *   **注意**：这里的 `2` 是指用户的 ID。但值得注意的是在 Docker 容器下部署的 Hydro，用户 ID 往往是 `3` 而不是 `2`。因为用户 ID 2 是系统内已经存在的 judge 用户，请改为：
-        ```bash
-        hydrooj cli user setSuperAdmin 3
-        ```
-    ###  如果误操作将 UID 为 2 的 judge 用户设置为超级管理员，请参考本文最后【 **误操作 UID 为 2 的用户为超级管理员的解决办法**】
+
+2.  **执行命令，设置超级管理员**
+    进入容器后，你会看到命令行提示符变成了 ` # `。此时直接执行初始化命令：
+    ```bash
+    hydrooj cli user setSuperAdmin 3
+    ```
+    *   **注意**：在安装过程中，系统已经默认注册了一个 uid 为 2 的测评账号。**用户名：** `judge`，**密码：** `examplepassword`。请务必及时修改密码。修改该账号密码后，同时还要再修改 `judge/judge.yaml` 中的 `password`。**否则可能会无法测评**。
+    ###  如果误操作将 UID 为 2 的 `judge` 用户设置为超级管理员，请参考本文最后【 **误操作 UID 为 2 的用户为超级管理员的解决办法**】
 
 ---
 
@@ -164,7 +175,7 @@ sudo kill -9 <PID>
 如果你不想进入容器，也可以通过 `docker exec` 在容器内部直接运行单条命令。
 
 **设置超级管理员**
-执行以下命令（同样建议先试 `2`，再试 `3`）：
+执行以下命令：
 ```bash
 docker exec oj-backend hydrooj cli user setSuperAdmin 3
 ```
@@ -250,27 +261,29 @@ Hydro的Docker部署包含三个核心服务：
 测评服务默认安装了12种编译器： 
 1. GCC (C语言编译器) 
 2. Python3 (Python解释器) 
-3. G++ (C++编译器) 
-4. Free Pascal编译器 
-5. OpenJDK 17 (Java开发工具包) 
-6. PHP CLI (PHP命令行接口) 
-7. Rust编译器 
-8. Glasgow Haskell编译器 
+3. G++ (C++ 编译器) 
+4. Free Pascal -compiler 编译器 
+5. OpenJDK-17-jdk-headless (Java 开发工具包) 
+6. PHP CLI (PHP 命令行接口) 
+7. Rust 编译器 
+8. Glasgow Haskell 编译器 
 9. JavaScriptCore 
-10. Go语言 
+10. Go 语言 
 11. Ruby 
-12. Mono (.NET框架)  
+12. Mono (.NET 框架)  
+
+# 部署完成后 >>>
 
 ### 系统访问与初始配置
-部署完成后，通过浏览器访问 http://localhost:8088 即可进入Hydro系统。
+部署完成后，通过浏览器访问 http://localhost:8088 即可进入 Hydro 系统。
 
 ### 首次使用需要注意以下事项： 
-默认账号配置 系统会自动注册一个测评账号： 
-• 用户名：judge 
-• 密码：examplepassword  
+ **系统会默认注册一个 uid 为 2 的测评账号：** 
+• **用户名**：`judge` 
+• **密码**：`examplepassword`  
 
 ### 重要提醒：
- **请务必及时修改默认密码**，并同步更新 evaluator/evaluator.yaml 配置文件中的密码设置，否则可能导致测评功能异常。
+ **请务必及时修改默认密码**，并同步更新 `judge/judge.yaml` 配置文件中的 `password` 密码，**否则可能导致测评功能异常。**
 
 ---
 

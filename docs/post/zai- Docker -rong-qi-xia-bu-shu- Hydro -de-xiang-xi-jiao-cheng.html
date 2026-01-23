@@ -97,22 +97,31 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <p>首先，你需要创建 <code class="notranslate">/hydro</code> 文件夹。因为这是在根目录下创建文件夹，需要管理员权限：</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">sudo mkdir /hydro</pre></div>
 <p><em>(系统可能会要求你输入密码，输入后按回车即可)</em></p>
-<h3>2. 修改文件夹权限（关键步骤）</h3>
+<h3>2. 修改文件夹权限（关键步骤，下面2个方法二选一）</h3>
 <p>默认情况下，<code class="notranslate">sudo mkdir</code> 创建的文件夹属于 <code class="notranslate">root</code> 用户。但你日常运行 Docker 或者操作代码通常使用的是普通用户（比如你的 <code class="notranslate">donsa</code> 用户）。为了避免后续操作出现“权限被拒绝”的错误，建议将该文件夹的所有者改为你的当前用户。</p>
-<p>假设你的用户名是 <code class="notranslate">donsa</code>，请运行：</p>
+<p><strong>方法2.1 假设你的用户名是 <code class="notranslate">donsa</code>，请运行：</strong></p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">sudo chown -R donsa:donsa /hydro</pre></div>
 <p><em>(注意：请将 <code class="notranslate">donsa:donsa</code> 替换为你实际的用户名，冒号前面是用户，后面是组)</em></p>
+<p><strong>方法2.2 也可以用 $USER:$USER 来直接修改文件夹权限</strong></p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">sudo chown -R <span class="pl-smi">$USER</span>:<span class="pl-smi">$USER</span> /hydro</pre></div>
+<p><em>(此命令将/hydro目录的所有权更改为当前用户，避免后续操作出现权限问题。$USER会自动替换为当前用户名)</em></p>
 <h3>3. 克隆项目代码</h3>
 <p>现在进入 <code class="notranslate">/hydro</code> 目录并执行命令克隆Hydro项目到本地：</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c1">cd</span> /hydro
-git clone https://gitcode.com/gh_mirrors/hy/Hydro.git</pre></div>
+git clone https://github.com/hydro-dev/Hydro.git </pre></div>
 <h3>4. 进入安装目录</h3>
 <p>下载完成后，进入 Docker 安装目录：</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c1">cd</span> Hydro/install/docker</pre></div>
 <h3>5. 启动 Docker 服务</h3>
 <p>执行启动命令：</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">docker-compose up -d</pre></div>
-<p>这个过程会根据网络情况自动搭建，大约需要5-30分钟，全程无需人工干预。</p>
+<ul>
+<li>这个过程会根据网络情况自动搭建，大约需要5-30分钟，全程无需人工干预。</li>
+<li>命令执行完成后运行 <code class="notranslate">docker ps -a</code>，当看到所有的容器的状态没有 <code class="notranslate">Exited (x) xxx</code> 就代表 OJ 已经启动成功。</li>
+<li><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji> 注意<br>
+安装过程中，系统会默认注册一个 uid 为 2 的测评账号。<strong>用户名：</strong> <code class="notranslate">judge</code>，<strong>密码：</strong> <code class="notranslate">examplepassword</code>。请务必及时修改密码。修改该账号密码后，还要再修改 <code class="notranslate">judge/judge.yaml</code> 中的 <code class="notranslate">password</code>。<strong>否则可能会无法测评</strong>。</li>
+<li><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji>正常情况下你的安装会是顺利的，但不排除会出现<strong>端口被占用</strong>的情况（如下）。</li>
+</ul>
 <hr>
 <h3>💡 补充说明</h3>
 <ul>
@@ -190,24 +199,23 @@ Error response from daemon: failed to set up container networking: dri
 <ul>
 <li>提示：如果报错 <code class="notranslate">sh</code> 不可用，可以尝试 <code class="notranslate">bash</code>（虽然该镜像通常只包含轻量级的 <code class="notranslate">sh</code>）。</li>
 </ul>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker <span class="pl-c1">exec</span> -it oj-backend bash</pre></div>
 </li>
 <li>
-<p><strong>执行命令</strong><br>
-进入容器后，你会看到命令行提示符变成了类似 <code class="notranslate">/app #</code>。此时直接执行初始化命令：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">hydrooj cli user setSuperAdmin 2</pre></div>
-<ul>
-<li><strong>注意</strong>：这里的 <code class="notranslate">2</code> 是指用户的 ID。但值得注意的是在 Docker 容器下部署的 Hydro，用户 ID 往往是 <code class="notranslate">3</code> 而不是 <code class="notranslate">2</code>。因为用户 ID 2 是系统内已经存在的 judge 用户，请改为：
+<p><strong>执行命令，设置超级管理员</strong><br>
+进入容器后，你会看到命令行提示符变成了 <code class="notranslate">#</code>。此时直接执行初始化命令：</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">hydrooj cli user setSuperAdmin 3</pre></div>
-</li>
+<ul>
+<li><strong>注意</strong>：在安装过程中，系统已经默认注册了一个 uid 为 2 的测评账号。<strong>用户名：</strong> <code class="notranslate">judge</code>，<strong>密码：</strong> <code class="notranslate">examplepassword</code>。请务必及时修改密码。修改该账号密码后，同时还要再修改 <code class="notranslate">judge/judge.yaml</code> 中的 <code class="notranslate">password</code>。<strong>否则可能会无法测评</strong>。</li>
 </ul>
-<h3>如果误操作将 UID 为 2 的 judge 用户设置为超级管理员，请参考本文最后【 <strong>误操作 UID 为 2 的用户为超级管理员的解决办法</strong>】</h3>
+<h3>如果误操作将 UID 为 2 的 <code class="notranslate">judge</code> 用户设置为超级管理员，请参考本文最后【 <strong>误操作 UID 为 2 的用户为超级管理员的解决办法</strong>】</h3>
 </li>
 </ol>
 <hr>
 <h3>方法二：如果必须在宿主机运行（使用完整路径）</h3>
 <p>如果你不想进入容器，也可以通过 <code class="notranslate">docker exec</code> 在容器内部直接运行单条命令。</p>
 <p><strong>设置超级管理员</strong><br>
-执行以下命令（同样建议先试 <code class="notranslate">2</code>，再试 <code class="notranslate">3</code>）：</p>
+执行以下命令：</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">docker <span class="pl-c1">exec</span> oj-backend hydrooj cli user setSuperAdmin 3</pre></div>
 <p><strong>关于 <code class="notranslate">pm2</code> 的说明</strong><br>
 在 Docker 部署中，<strong>不需要</strong>手动重启 <code class="notranslate">pm2</code>。</p>
@@ -301,25 +309,26 @@ Error response from daemon: failed to set up container networking: dri
 <ol>
 <li>GCC (C语言编译器)</li>
 <li>Python3 (Python解释器)</li>
-<li>G++ (C++编译器)</li>
-<li>Free Pascal编译器</li>
-<li>OpenJDK 17 (Java开发工具包)</li>
-<li>PHP CLI (PHP命令行接口)</li>
-<li>Rust编译器</li>
-<li>Glasgow Haskell编译器</li>
+<li>G++ (C++ 编译器)</li>
+<li>Free Pascal -compiler 编译器</li>
+<li>OpenJDK-17-jdk-headless (Java 开发工具包)</li>
+<li>PHP CLI (PHP 命令行接口)</li>
+<li>Rust 编译器</li>
+<li>Glasgow Haskell 编译器</li>
 <li>JavaScriptCore</li>
-<li>Go语言</li>
+<li>Go 语言</li>
 <li>Ruby</li>
-<li>Mono (.NET框架)</li>
+<li>Mono (.NET 框架)</li>
 </ol>
+<h1>部署完成后 &gt;&gt;&gt;</h1>
 <h3>系统访问与初始配置</h3>
-<p>部署完成后，通过浏览器访问 <a href="http://localhost:8088" rel="nofollow">http://localhost:8088</a> 即可进入Hydro系统。</p>
+<p>部署完成后，通过浏览器访问 <a href="http://localhost:8088" rel="nofollow">http://localhost:8088</a> 即可进入 Hydro 系统。</p>
 <h3>首次使用需要注意以下事项：</h3>
-<p>默认账号配置 系统会自动注册一个测评账号：<br>
-• 用户名：judge<br>
-• 密码：examplepassword</p>
+<p><strong>系统会默认注册一个 uid 为 2 的测评账号：</strong><br>
+• <strong>用户名</strong>：<code class="notranslate">judge</code><br>
+• <strong>密码</strong>：<code class="notranslate">examplepassword</code></p>
 <h3>重要提醒：</h3>
-<p><strong>请务必及时修改默认密码</strong>，并同步更新 evaluator/evaluator.yaml 配置文件中的密码设置，否则可能导致测评功能异常。</p>
+<p><strong>请务必及时修改默认密码</strong>，并同步更新 <code class="notranslate">judge/judge.yaml</code> 配置文件中的 <code class="notranslate">password</code> 密码，<strong>否则可能导致测评功能异常。</strong></p>
 <hr>
 <h2>误操作 UID 为 2 的用户为超级管理员的解决办法：</h2>
 <p>如果误操作使用了 <code class="notranslate">hydrooj cli user setSuperAdmin 2</code> 将 UID 为 2 的用户（这个用户就是：judge）设置为超级管理员。可以按照以下步骤进行处理，以取消并设置 judge 用户正确的权限：</p>
