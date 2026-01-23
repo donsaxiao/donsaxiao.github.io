@@ -92,7 +92,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 • Linux系统：推荐使用Linux操作系统<br>
 • 磁盘空间：至少2GB可用空间<br>
 • 网络连接：稳定的网络连接用于下载依赖</p>
-<h2>一、快速安装步骤详解</h2>
+<h2>🟢 一、快速安装步骤详解</h2>
 <h3>1. 创建目标目录</h3>
 <p>首先，你需要创建 <code class="notranslate">/hydro</code> 文件夹。因为这是在根目录下创建文件夹，需要管理员权限：</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">sudo mkdir /hydro</pre></div>
@@ -120,7 +120,7 @@ git clone https://github.com/hydro-dev/Hydro.git </pre></div>
 <li>命令执行完成后运行 <code class="notranslate">docker ps -a</code>，当看到所有的容器的状态没有 <code class="notranslate">Exited (x) xxx</code> 就代表 OJ 已经启动成功。</li>
 <li><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji> 注意<br>
 安装过程中，系统会默认注册一个 uid 为 2 的测评账号。<strong>用户名：</strong> <code class="notranslate">judge</code>，<strong>密码：</strong> <code class="notranslate">examplepassword</code>。请务必及时修改密码。修改该账号密码后，还要再修改 <code class="notranslate">judge/judge.yaml</code> 中的 <code class="notranslate">password</code>。<strong>否则可能会无法测评</strong>。</li>
-<li><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji>正常情况下你的安装会是顺利的，但不排除会出现<strong>端口被占用</strong>的情况（如下）。</li>
+<li><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji> 正常情况下你的安装会是顺利的，但不排除会出现<strong>端口被占用</strong>的情况（如下）。</li>
 </ul>
 <hr>
 <h2>💡 二、端口被占用的补充说明和处理办法</h2>
@@ -175,12 +175,20 @@ Error response from daemon: failed to set up container networking: dri
 </ul>
 <h3>📌 最后提醒</h3>
 <ul>
-<li>如果你选择 <strong>修改 Hydro 端口为 8088</strong> ，在访问 Hydro 时需要加上端口号（例如：<code class="notranslate">http://你的服务器IP:8088</code>）。</li>
+<li>如果你选择 <strong>修改 Hydro 端口为 8088</strong> ，在访问 Hydro 时需要加端口号（如：<code class="notranslate">http://IP:8088</code>）。</li>
 <li>上内容是解决端口被占用的解决方案，如果端口未占用，可以跳过，直接执行下面的步骤。</li>
 </ul>
 <hr>
-<h2>三、部署完成后的注意事项</h2>
-<h3>📌 特别注意 Ubuntu 和 Docker 部署的 Hydro，操作命令不一样。</h3>
+<h2><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji> 三、部署完成后的注意事项</h2>
+<h3>1、系统访问与初始配置</h3>
+<p>部署完成后，通过浏览器访问 <a href="http://localhost:8088" rel="nofollow">http://localhost:8088</a> 即可进入 Hydro 系统。</p>
+<h3>2、首次使用需要注意以下事项：</h3>
+<p><strong>系统会默认注册一个 uid 为 2 的测评账号：</strong><br>
+• <strong>用户名</strong>：<code class="notranslate">judge</code><br>
+• <strong>密码</strong>：<code class="notranslate">examplepassword</code></p>
+<h3>3、重要提醒：</h3>
+<p><strong>请务必及时修改默认密码</strong>，并同步更新 <code class="notranslate">judge/judge.yaml</code> 配置文件中的 <code class="notranslate">password</code> 密码，<strong>否则可能导致测评功能异常。</strong></p>
+<h3>📌 4、特别注意 Ubuntu 和 Docker 部署的 Hydro，操作命令不一样。</h3>
 <p>安装完成后，在浏览器访问 <strong><a href="http://ip:8088" rel="nofollow">http://ip:8088</a></strong> 时，在首页提示如下：<br>
 ■ 在右上角注册一个账号。<br>
 ■ 回到刚刚的终端，使用 <code class="notranslate">hydrooj cli user setSuperAdmin 2</code> 将 UID 为 2 的用户设置为超级管理员。<br>
@@ -290,7 +298,7 @@ Error response from daemon: failed to set up container networking: dri
 
 
 <hr>
-<h2>四、Hydro 服务架构解析</h2>
+<h2>🏠 四、Hydro 服务架构解析</h2>
 <p>Hydro的Docker部署包含三个核心服务：</p>
 <h3>1. 后端服务 (oj-backend)</h3>
 <p>• 基于Node.js 22构建<br>
@@ -321,17 +329,7 @@ Error response from daemon: failed to set up container networking: dri
 <li>Ruby</li>
 <li>Mono (.NET 框架)</li>
 </ol>
-<h2>五、部署完成后的一些操作</h2>
-<h3>系统访问与初始配置</h3>
-<p>部署完成后，通过浏览器访问 <a href="http://localhost:8088" rel="nofollow">http://localhost:8088</a> 即可进入 Hydro 系统。</p>
-<h3>首次使用需要注意以下事项：</h3>
-<p><strong>系统会默认注册一个 uid 为 2 的测评账号：</strong><br>
-• <strong>用户名</strong>：<code class="notranslate">judge</code><br>
-• <strong>密码</strong>：<code class="notranslate">examplepassword</code></p>
-<h3>重要提醒：</h3>
-<p><strong>请务必及时修改默认密码</strong>，并同步更新 <code class="notranslate">judge/judge.yaml</code> 配置文件中的 <code class="notranslate">password</code> 密码，<strong>否则可能导致测评功能异常。</strong></p>
-<hr>
-<h2>误操作 UID 为 2 的用户为超级管理员的解决办法：</h2>
+<h2>五、误操作 UID 为 2 的用户为超级管理员的解决办法：</h2>
 <p>如果误操作使用了 <code class="notranslate">hydrooj cli user setSuperAdmin 2</code> 将 UID 为 2 的用户（这个用户就是：judge）设置为超级管理员。可以按照以下步骤进行处理，以取消并设置 judge 用户正确的权限：</p>
 <h3>🔑 第一步：取消超级管理员权限</h3>
 <p>您可以通过 Hydro CLI 命令行工具，将该用户的权限重置为普通用户权限（即默认权限）。</p>
@@ -351,7 +349,7 @@ Error response from daemon: failed to set up container networking: dri
 <li><strong>命令解释</strong>：<code class="notranslate">setJudge</code> 是一个便捷命令，专门用于将指定用户设置为评测账号，它会自动为其添加 <code class="notranslate">PRIV_JUDGE</code> 权限。</li>
 <li><strong>效果</strong>：该账号现在拥有了评测机连接和工作的所有必要权限，但没有其他管理员权限，这是最安全的配置。</li>
 </ul>
-<h4>📌 总结</h4>
+<h3>📌 总结</h3>
 <p>通过以上两个步骤，您已经成功将该测评账号恢复到了正确的配置状态：</p>
 <ol>
 <li>先用 <code class="notranslate">setPriv 2 1</code> 移除了过高的超级管理员权限。</li>
