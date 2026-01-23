@@ -115,7 +115,9 @@ Error response from daemon: failed to set up container networking: dri
 
 部署完成后，通过浏览器访问 `http://你的IP:端口`（如果改了端口就是 `http://你的IP:8088`）。
 
-你可能会看到提示让你注册账号并执行 `hydrooj cli user setSuperAdmin` 命令。**请注意，如果你直接在终端输入这个命令，会提示“未找到命令”**。
+在首页中你可能会看到提示注册账号并执行 `hydrooj cli user setSuperAdmin` 将刚注册的用户设置为超级管理员。然后再使用 pm2 restart hydrooj 重启以使管理员更改立刻生效。……
+
+**请注意**：如果你直接在终端输入`hydrooj cli user setSuperAdmin` 或 `pm2 restart hydrooj` 这个命令，会提示 **“未找到命令”**。
 
 **原因**：因为你使用的是 Docker 部署，`hydrooj` 命令只存在于容器内部，宿主机（你的 Linux 系统）是找不到的。
 
