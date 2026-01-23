@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="https://avatars.githubusercontent.com/u/96248528?v=4"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="很高兴能协助你完成 Hydro 在 Docker 环境下的部署。">
+<meta property="og:title" content="Hydro 评测系统在 Docker 环境下部署保姆级教程">
+<meta property="og:description" content="很高兴能协助你完成 Hydro 在 Docker 环境下的部署。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://donsaxiao.github.io/post/Hydro%20-ping-ce-xi-tong-zai-%20Docker%20-huan-jing-xia-bu-shu-bao-mu-ji-jiao-cheng.html">
+<meta property="og:image" content="https://avatars.githubusercontent.com/u/96248528?v=4">
+<title>Hydro 评测系统在 Docker 环境下部署保姆级教程</title>
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+.copy-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    color: var(--color-fg-on-emphasis);
+    background-color: var(--color-fg-muted);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 12px;
+}
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">Hydro 评测系统在 Docker 环境下部署保姆级教程</h1>
+<div class="title-right">
+    <a href="https://donsaxiao.github.io" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/donsaxiao/donsaxiao.github.io/issues/10" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><p>很高兴能协助你完成 Hydro 在 Docker 环境下的部署。作为一个结合了技术理解与表达能力的助手，我深知初次接触命令行和容器化部署可能会让人感到陌生。</p>
+<p>这份教程完全基于你提供的参考资料，我将它重新梳理为一个<strong>保姆级</strong>的操作指南。请不要被那些代码吓到，只要你按照步骤复制粘贴，就能顺利完成安装。</p>
+<hr>
+<h3>🛠️ Hydro 评测系统 Docker 部署保姆级教程</h3>
+<p><strong>适用场景</strong>：本教程适用于拥有 Linux 服务器（如 Ubuntu/CentOS）或本地 Linux 环境的用户。如果你是新手，请确保你有一台已经安装好 SSH 工具（如 Xshell、MobaXterm 或 FinalShell）并能连接到 Linux 系统的电脑。</p>
+<h4>📋 一、 准备工作</h4>
+<p>在开始之前，请确认你的系统满足以下条件：</p>
+<ol>
+<li><strong>操作系统</strong>：Linux（推荐 Ubuntu 20.04/22.04 或 CentOS 7+）。</li>
+<li><strong>环境要求</strong>：已安装 Docker 和 Docker Compose。
+<ul>
+<li><em>注：如果未安装，请先搜索“Linux Docker 安装教程”进行环境配置。</em></li>
+</ul>
+</li>
+<li><strong>资源要求</strong>：至少 2GB 可用磁盘空间，稳定的网络连接。</li>
+</ol>
+<hr>
+<h4>🚀 二、 核心安装步骤</h4>
+<p>请打开你的终端（Terminal），按照以下顺序执行命令。</p>
+<p><strong>1. 创建工作目录</strong><br>
+我们需要在根目录下创建一个名为 <code class="notranslate">/hydro</code> 的文件夹。因为是在根目录操作，需要管理员权限。</p>
+<ul>
+<li><strong>操作</strong>：复制以下命令并回车：
+<div class="highlight highlight-source-shell"><pre class="notranslate">sudo mkdir /hydro</pre></div>
+<em>系统可能会提示输入密码，输入你的用户密码（输入时不会显示字符，输完直接回车即可）。</em></li>
+</ul>
+<p><strong>2. 修改文件夹权限（关键步骤）</strong><br>
+默认创建的文件夹属于 <code class="notranslate">root</code> 用户。为了避免后续操作出现“权限被拒绝”的错误，我们需要把文件夹的所有权改为当前用户。</p>
+<ul>
+<li><strong>操作</strong>：请先在终端输入 <code class="notranslate">whoami</code> 查看你的用户名（假设为 <code class="notranslate">donsa</code>），然后复制以下命令（将 <code class="notranslate">donsa</code> 替换为你自己的用户名）：
+<div class="highlight highlight-source-shell"><pre class="notranslate">sudo chown -R donsa:donsa /hydro</pre></div>
+<em>或者，你可以直接使用系统变量自动获取用户名（推荐）：</em>
+<div class="highlight highlight-source-shell"><pre class="notranslate">sudo chown -R <span class="pl-smi">$USER</span>:<span class="pl-smi">$USER</span> /hydro</pre></div>
+</li>
+</ul>
+<p><strong>3. 下载 Hydro 项目文件</strong><br>
+进入刚才创建的文件夹，并从 GitHub 克隆 Hydro 的安装代码。</p>
+<ul>
+<li><strong>操作</strong>：依次执行以下三条命令（每条回车后再执行下一条）：
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c1">cd</span> /hydro
+git clone https://github.com/hydro-dev/Hydro.git
+<span class="pl-c1">cd</span> Hydro/install/docker</pre></div>
+</li>
+</ul>
+<p><strong>4. 启动 Docker 服务</strong><br>
+这是最激动人心的一步，Docker 会自动下载镜像并启动容器。</p>
+<ul>
+<li><strong>操作</strong>：执行以下命令：
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker-compose up -d</pre></div>
+<em>系统会自动运行，这通常需要 5-30 分钟（取决于你的网速），请耐心等待，期间无需任何操作。</em></li>
+</ul>
+<p><strong>5. 检查运行状态</strong><br>
+安装完成后，我们需要检查容器是否正常启动。</p>
+<ul>
+<li><strong>操作</strong>：执行命令：
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker ps -a</pre></div>
+<em><strong>如何看结果</strong>：查看 <code class="notranslate">STATUS</code> 列。如果看到 <code class="notranslate">Up</code> 字样，或者没有出现 <code class="notranslate">Exited (x) xxx</code>（退出状态），说明安装成功。</em></li>
+</ul>
+<hr>
+<h4><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji> 三、 常见问题与注意事项（必读）</h4>
+<p>在进行下一步之前，你需要了解系统默认生成的一个特殊账号，以及可能遇到的端口冲突问题。</p>
+<p><strong>1. 默认测评账号（非常重要）</strong><br>
+系统在安装过程中，会自动注册一个用于测评的账号。</p>
+<ul>
+<li><strong>用户名</strong>：<code class="notranslate">judge</code></li>
+<li><strong>密码</strong>：<code class="notranslate">examplepassword</code></li>
+<li><strong><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji> 重要提醒</strong>：出于安全考虑，<strong>请务必及时修改这个密码</strong>。
+<ul>
+<li>修改后，你还需要同步修改配置文件 <code class="notranslate">/hydro/Hydro/install/docker/judge/judge.yaml</code>（./judge/judge.yaml:/root/.hydro/judge.yaml） 中的 <code class="notranslate">password</code> 字段。</li>
+<li><strong>后果</strong>：如果不修改配置文件中的密码，系统将无法进行代码测评。</li>
+</ul>
+</li>
+</ul>
+<p><strong>2. 端口被占用怎么办？</strong><br>
+如果你在执行 <code class="notranslate">docker-compose up -d</code> 时看到 <code class="notranslate">Error response from daemon</code> 或 <code class="notranslate">address already in use</code> 的错误，说明 80 端口被占用了（通常是 Nginx 或 Apache 占用了）。</p>
+<ul>
+<li>
+<p><strong>解决方法 A（推荐）：修改 Hydro 端口</strong></p>
+<ol>
+<li>使用编辑器打开配置文件：<code class="notranslate">nano docker-compose.yml</code></li>
+<li>找到 <code class="notranslate">oj-backend</code> 下的 <code class="notranslate">ports</code> 配置。</li>
+<li>将 <code class="notranslate">- "80:8888"</code> 修改为 <code class="notranslate">- "8088:8888"</code> （意思是把 Hydro 映射到 8088 端口）。</li>
+<li>保存退出（按 <code class="notranslate">Ctrl+O</code> 写入 -&gt; 回车 -&gt; <code class="notranslate">Ctrl+X</code> 退出）。</li>
+<li>重新执行 <code class="notranslate">docker-compose up -d</code>。</li>
+</ol>
+</li>
+<li>
+<p><strong>解决方法 B：终止占用进程</strong></p>
+<ol>
+<li>查找占用进程：<code class="notranslate">sudo lsof -i :80</code></li>
+<li>记下 PID（进程号），然后终止它：<code class="notranslate">sudo kill -9 &lt;PID&gt;</code></li>
+</ol>
+</li>
+</ul>
+<hr>
+<h4>🔑 四、 设置超级管理员（新手最容易卡住的地方）</h4>
+<p>部署完成后，通过浏览器访问 <code class="notranslate">http://你的IP:端口</code>（如果改了端口就是 <code class="notranslate">http://你的IP:8088</code>）。</p>
+<p>你可能会看到提示让你注册账号并执行 <code class="notranslate">hydrooj cli user setSuperAdmin</code> 命令。<strong>请注意，如果你直接在终端输入这个命令，会提示“未找到命令”</strong>。</p>
+<p><strong>原因</strong>：因为你使用的是 Docker 部署，<code class="notranslate">hydrooj</code> 命令只存在于容器内部，宿主机（你的 Linux 系统）是找不到的。</p>
+<p><strong>✅ 正确操作步骤：</strong></p>
+<ol>
+<li>
+<p><strong>进入容器内部</strong>：<br>
+在终端执行以下命令进入后端容器：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker <span class="pl-c1">exec</span> -it oj-backend sh</pre></div>
+<p><em>此时你的命令行提示符会变成 <code class="notranslate">#</code>，说明你已经进入了容器内部。</em></p>
+</li>
+<li>
+<p><strong>执行设置命令</strong>：<br>
+假设你刚才注册的新账号 UID 是 3（在用户信息里能看到），在容器内执行：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">hydrooj cli user setSuperAdmin 3</pre></div>
+<p><em>这会将 UID 为 3 的账号设置为超级管理员。</em></p>
+</li>
+<li>
+<p><strong>关于重启服务</strong>：</p>
+<ul>
+<li><strong>误区</strong>：不要在宿主机上尝试安装 <code class="notranslate">pm2</code> 或运行 <code class="notranslate">pm2 restart</code>。</li>
+<li><strong>正确做法</strong>：Docker 容器由 Docker 管理。如果需要重启服务，请直接重启容器：
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker restart oj-backend</pre></div>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h4>🛡️ 五、 恢复误操作指南</h4>
+<p>如果你不小心把默认的 <code class="notranslate">judge</code> 账号（UID 为 2）设置成了超级管理员，会导致安全风险或测评异常。请按照以下步骤恢复：</p>
+<ol>
+<li>
+<p><strong>进入容器</strong>（同上）：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker <span class="pl-c1">exec</span> -it oj-backend sh</pre></div>
+</li>
+<li>
+<p><strong>取消超级管理员权限</strong>：<br>
+执行命令将 UID 2 的权限重置为普通用户：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">hydrooj cli user setPriv 2 1</pre></div>
+</li>
+<li>
+<p><strong>恢复测评机权限</strong>：<br>
+重新赋予它测评专用权限：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">hydrooj cli user setJudge 2</pre></div>
+</li>
+</ol>
+<hr>
+<h4>🏁 六、 总结</h4>
+<p>恭喜你！完成以上步骤后，你的 Hydro 评测系统应该已经成功运行在 Docker 容器中了。</p>
+<ul>
+<li><strong>访问地址</strong>：<code class="notranslate">http://你的IP:端口</code></li>
+<li><strong>核心逻辑</strong>：记住所有 <code class="notranslate">hydrooj</code> 开头的命令都需要在 <code class="notranslate">docker exec</code> 进入容器后才能执行。</li>
+<li><strong>日常维护</strong>：如果服务出现问题，最简单的办法是 <code class="notranslate">docker restart oj-backend</code>。</li>
+</ul>
+<p>希望这份教程能助你顺利搭建起属于你的测评系统！如有其他问题，请随时提问。</p></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://donsaxiao.github.io">动赛博客</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if(""!=""){
+    var startSite=new Date("");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","donsaxiao/donsaxiao.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const createClipboardHTML = (codeContent, additionalClasses = '') => `
+        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
+        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
+            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
+                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="${IconList["copy"]}"></path></svg>
+                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="${IconList["check"]}"></path></svg>
+            </clipboard-copy>
+            <div class="copy-feedback">Copied!</div>
+        </div>
+    `;
+
+    const handleCodeElements = (selector = '') => {
+        document.querySelectorAll(selector).forEach(codeElement => {
+            const codeContent = codeElement.innerHTML;
+            const newStructure = document.createElement('div');
+            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
+            newStructure.innerHTML = createClipboardHTML(codeContent);
+
+            const parentElement = codeElement.parentElement;
+            if (selector.includes('highlight')) {
+                parentElement.insertBefore(newStructure, codeElement.nextSibling);
+                parentElement.removeChild(codeElement);
+            } else {
+                parentElement.parentElement.replaceChild(newStructure, parentElement);
+            }
+        });
+    };
+
+    handleCodeElements('pre.notranslate > code.notranslate');
+    handleCodeElements('div.highlight > pre.notranslate');
+
+    let currentFeedback = null;
+    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
+        copyButton.addEventListener('click', () => {
+            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const copyIcon = copyButton.querySelector('.octicon-copy');
+            const checkIcon = copyButton.querySelector('.octicon-check');
+            const copyFeedback = copyButton.nextElementSibling;
+
+            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
+            currentFeedback = copyFeedback;
+
+            copyIcon.classList.add('d-none');
+            checkIcon.classList.remove('d-none');
+            copyFeedback.style.display = 'block';
+            copyButton.style.borderColor = 'var(--color-success-fg)';
+
+            setTimeout(() => {
+                copyIcon.classList.remove('d-none');
+                checkIcon.classList.add('d-none');
+                copyFeedback.style.display = 'none';
+                copyButton.style.borderColor = '';
+            }, 2000);
+        });
+    });
+});
+
+</script>
+
+
+</html>
