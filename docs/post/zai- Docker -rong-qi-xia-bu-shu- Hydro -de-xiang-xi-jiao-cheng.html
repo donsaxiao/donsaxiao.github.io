@@ -92,7 +92,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 • Linux系统：推荐使用Linux操作系统<br>
 • 磁盘空间：至少2GB可用空间<br>
 • 网络连接：稳定的网络连接用于下载依赖</p>
-<h2>快速安装步骤详解</h2>
+<h2>一、快速安装步骤详解</h2>
 <h3>1. 创建目标目录</h3>
 <p>首先，你需要创建 <code class="notranslate">/hydro</code> 文件夹。因为这是在根目录下创建文件夹，需要管理员权限：</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">sudo mkdir /hydro</pre></div>
@@ -123,7 +123,7 @@ git clone https://github.com/hydro-dev/Hydro.git </pre></div>
 <li><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji>正常情况下你的安装会是顺利的，但不排除会出现<strong>端口被占用</strong>的情况（如下）。</li>
 </ul>
 <hr>
-<h3>💡 补充说明</h3>
+<h2>💡 二、端口被占用的补充说明和处理办法</h2>
 <ul>
 <li><strong>如果提示端口占用</strong>：显示类似下面的内容</li>
 </ul>
@@ -179,15 +179,16 @@ Error response from daemon: failed to set up container networking: dri
 <li>上内容是解决端口被占用的解决方案，如果端口未占用，可以跳过，直接执行下面的步骤。</li>
 </ul>
 <hr>
-<h3>📌 特别注意 Ubuntu 和 docker-compose 部署的 Hydro，操作命令是不一样的</h3>
+<h2>三、部署完成后的注意事项</h2>
+<h3>📌 特别注意 Ubuntu 和 Docker 部署的 Hydro，操作命令不一样。</h3>
 <p>安装完成后，在浏览器访问 <strong><a href="http://ip:8088" rel="nofollow">http://ip:8088</a></strong> 时，在首页提示如下：<br>
 ■ 在右上角注册一个账号。<br>
 ■ 回到刚刚的终端，使用 <code class="notranslate">hydrooj cli user setSuperAdmin 2</code> 将 UID 为 2 的用户设置为超级管理员。<br>
 ■ 使用 <code class="notranslate">pm2 restart hydrooj</code> 重启以使管理员更改立刻生效。</p>
-<p>当你按照首页上的提示，在终端使用 <code class="notranslate">hydrooj cli user setSuperAdmin 2</code> 时，会出现 <code class="notranslate">hydrooj：未找到命令</code></p>
-<p>这是一个非常典型的新手误区。简单来说：<strong>你试图在宿主机（你的 Ubuntu 系统）上执行只有在 Hydro 容器内部才能识别的命令。</strong></p>
+<p>当你按照首页上的提示，在终端使用 <code class="notranslate">hydrooj cli user setSuperAdmin 2</code> 时，会出现 <code class="notranslate">hydrooj：未找到命令</code> ，这是一个非常典型的新手误区。</p>
+<p>简单来说：<strong>你试图在宿主机（你的 Ubuntu 系统）上执行只有在 Hydro 容器内部才能识别的命令。</strong></p>
 <p>因为你使用的是 <code class="notranslate">docker-compose</code> 部署，所有的服务（包括 Node.js 运行时和 pm2 进程管理器）都封装在隔离的容器里。宿主机（你现在操作的终端）并不认识 <code class="notranslate">hydrooj</code> 或 <code class="notranslate">pm2</code> 这些命令。</p>
-<p>请按照以下步骤解决：</p>
+<p>👀 请按照以下步骤解决：</p>
 <hr>
 <h3>方法一：进入容器执行（推荐）</h3>
 <p>你需要先进入 <code class="notranslate">oj-backend</code> 容器的内部，才能执行这些命令。</p>
@@ -289,7 +290,7 @@ Error response from daemon: failed to set up container networking: dri
 
 
 <hr>
-<h2>Hydro 服务架构解析</h2>
+<h2>四、Hydro 服务架构解析</h2>
 <p>Hydro的Docker部署包含三个核心服务：</p>
 <h3>1. 后端服务 (oj-backend)</h3>
 <p>• 基于Node.js 22构建<br>
@@ -320,7 +321,7 @@ Error response from daemon: failed to set up container networking: dri
 <li>Ruby</li>
 <li>Mono (.NET 框架)</li>
 </ol>
-<h1>部署完成后 &gt;&gt;&gt;</h1>
+<h2>五、部署完成后的一些操作</h2>
 <h3>系统访问与初始配置</h3>
 <p>部署完成后，通过浏览器访问 <a href="http://localhost:8088" rel="nofollow">http://localhost:8088</a> 即可进入 Hydro 系统。</p>
 <h3>首次使用需要注意以下事项：</h3>

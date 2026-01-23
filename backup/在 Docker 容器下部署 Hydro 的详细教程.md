@@ -10,7 +10,7 @@ Docker 部署 Hydro 具有多重优势：环境隔离确保系统稳定性，快
 • 磁盘空间：至少2GB可用空间 
 • 网络连接：稳定的网络连接用于下载依赖
 
-## 快速安装步骤详解
+## 一、快速安装步骤详解
 
 ### 1. 创建目标目录
 首先，你需要创建 `/hydro` 文件夹。因为这是在根目录下创建文件夹，需要管理员权限：
@@ -67,7 +67,8 @@ docker-compose up -d
 
 ---
 
-### 💡 补充说明
+## 💡 二、端口被占用的补充说明和处理办法
+
 - **如果提示端口占用**：显示类似下面的内容
 ```
 WARN[0000] No services to build                         
@@ -130,19 +131,22 @@ sudo kill -9 <PID>
 
 ---
 
-### 📌 特别注意 Ubuntu 和 docker-compose 部署的 Hydro，操作命令是不一样的
+##  三、部署完成后的注意事项
+
+### 📌 特别注意 Ubuntu 和 Docker 部署的 Hydro，操作命令不一样。
+
 安装完成后，在浏览器访问 **http://ip:8088** 时，在首页提示如下：
 ■ 在右上角注册一个账号。
 ■ 回到刚刚的终端，使用 `hydrooj cli user setSuperAdmin 2` 将 UID 为 2 的用户设置为超级管理员。 
 ■ 使用 `pm2 restart hydrooj` 重启以使管理员更改立刻生效。
 
-当你按照首页上的提示，在终端使用 `hydrooj cli user setSuperAdmin 2` 时，会出现 `hydrooj：未找到命令`
+当你按照首页上的提示，在终端使用 `hydrooj cli user setSuperAdmin 2` 时，会出现 `hydrooj：未找到命令` ，这是一个非常典型的新手误区。
 
-这是一个非常典型的新手误区。简单来说：**你试图在宿主机（你的 Ubuntu 系统）上执行只有在 Hydro 容器内部才能识别的命令。**
+简单来说：**你试图在宿主机（你的 Ubuntu 系统）上执行只有在 Hydro 容器内部才能识别的命令。**
 
 因为你使用的是 `docker-compose` 部署，所有的服务（包括 Node.js 运行时和 pm2 进程管理器）都封装在隔离的容器里。宿主机（你现在操作的终端）并不认识 `hydrooj` 或 `pm2` 这些命令。
 
-请按照以下步骤解决：
+👀 请按照以下步骤解决：
 
 ---
 
@@ -237,7 +241,7 @@ docker exec oj-backend hydrooj cli user setSuperAdmin 3
 
 ---
 
-## Hydro 服务架构解析
+## 四、Hydro 服务架构解析
 Hydro的Docker部署包含三个核心服务： 
 
 ### 1. 后端服务 (oj-backend) 
@@ -272,7 +276,7 @@ Hydro的Docker部署包含三个核心服务：
 11. Ruby 
 12. Mono (.NET 框架)  
 
-# 部署完成后 >>>
+## 五、部署完成后的一些操作
 
 ### 系统访问与初始配置
 部署完成后，通过浏览器访问 http://localhost:8088 即可进入 Hydro 系统。
