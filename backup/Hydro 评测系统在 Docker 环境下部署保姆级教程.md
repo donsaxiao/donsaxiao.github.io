@@ -82,16 +82,29 @@
 
 **2. 端口被占用怎么办？**
 如果你在执行 `docker-compose up -d` 时看到 `Error response from daemon` 或 `address already in use` 的错误，说明 80 端口被占用了（通常是 Nginx 或 Apache 占用了）。
+```bash
+WARN[0000] No services to build                         
+[+] up 3/3
+ ✔ Container oj-mongo   Healthy                                            6.5s 
+ ✔ Container oj-backend Created                                            0.0s 
+ ✔ Container oj-judge   Created                                            0.0s 
+Error response from daemon: failed to set up container networking: driver failed programming external connectivity on endpoint oj-backend (8a61cca3bd252522c3139b1b8480e36f47a03f5125c968fa1f307c10ab3b3459): failed to bind host port for 0.0.0.0:80:172.19.0.3:8888/tcp: address already in use
+```
 
 *   **解决方法 A（推荐）：修改 Hydro 端口**
-    1.  使用编辑器打开配置文件：`nano docker-compose.yml`
-    2.  找到 `oj-backend` 下的 `ports` 配置。
-    3.  将 `- "80:8888"` 修改为 `- "8088:8888"` （意思是把 Hydro 映射到 8088 端口）。
-    4.  保存退出（按 `Ctrl+O` 写入 -> 回车 -> `Ctrl+X` 退出）。
-    5.  重新执行 `docker-compose up -d`。
-
-*   **解决方法 B：终止占用进程**
-    1.  查找占用进程：`sudo lsof -i :80`
+    1.  进入 Hydro 的 Docker 配置目录：`cd /hydro/Hydro/install/docker`
+    2.  使用编辑器打开配置文件：`nano docker-compose.yml`
+    3.  找到 `oj-backend` 下的 `ports` 配置。
+    4.  将 `- "80:8888"` 修改为 `- "8088:8888"` （意思是把 Hydro 映射到 8088 端口）。
+     ```bash
+ services:
+  oj-backend:
+    ports:
+      - "8088:8888"  # 原来是 "80:8888"
+    ```
+    5.  保存退出（按 `Ctrl+O` 写入 -> 回车 -> `Ctrl+X` 退出）。
+    6.  重新执行 `docker-compose up -d`。*   **解决方法 B：终止占用进程**
+    1.  查找占用进程：`sudo lsof -i :80` 或 `sudo netstat -tuln | grep :80`
     2.  记下 PID（进程号），然后终止它：`sudo kill -9 <PID>`
 
 ---

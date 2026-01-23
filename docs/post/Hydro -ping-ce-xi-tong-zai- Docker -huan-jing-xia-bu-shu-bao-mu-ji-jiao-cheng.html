@@ -158,25 +158,32 @@ git clone https://github.com/hydro-dev/Hydro.git
 </ul>
 <p><strong>2. 端口被占用怎么办？</strong><br>
 如果你在执行 <code class="notranslate">docker-compose up -d</code> 时看到 <code class="notranslate">Error response from daemon</code> 或 <code class="notranslate">address already in use</code> 的错误，说明 80 端口被占用了（通常是 Nginx 或 Apache 占用了）。</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">WARN[0000] No services to build                         
+[+] up 3/3
+ ✔ Container oj-mongo   Healthy                                            6.5s 
+ ✔ Container oj-backend Created                                            0.0s 
+ ✔ Container oj-judge   Created                                            0.0s 
+Error response from daemon: failed to set up container networking: driver failed programming external connectivity on endpoint oj-backend (8a61cca3bd252522c3139b1b8480e36f47a03f5125c968fa1f307c10ab3b3459): failed to bind host port for 0.0.0.0:80:172.19.0.3:8888/tcp: address already in use</pre></div>
 <ul>
-<li>
-<p><strong>解决方法 A（推荐）：修改 Hydro 端口</strong></p>
+<li><strong>解决方法 A（推荐）：修改 Hydro 端口</strong>
 <ol>
+<li>进入 Hydro 的 Docker 配置目录：<code class="notranslate">cd /hydro/Hydro/install/docker</code></li>
 <li>使用编辑器打开配置文件：<code class="notranslate">nano docker-compose.yml</code></li>
 <li>找到 <code class="notranslate">oj-backend</code> 下的 <code class="notranslate">ports</code> 配置。</li>
 <li>将 <code class="notranslate">- "80:8888"</code> 修改为 <code class="notranslate">- "8088:8888"</code> （意思是把 Hydro 映射到 8088 端口）。</li>
-<li>保存退出（按 <code class="notranslate">Ctrl+O</code> 写入 -&gt; 回车 -&gt; <code class="notranslate">Ctrl+X</code> 退出）。</li>
-<li>重新执行 <code class="notranslate">docker-compose up -d</code>。</li>
 </ol>
-</li>
-<li>
-<p><strong>解决方法 B：终止占用进程</strong></p>
-<ol>
-<li>查找占用进程：<code class="notranslate">sudo lsof -i :80</code></li>
-<li>记下 PID（进程号），然后终止它：<code class="notranslate">sudo kill -9 &lt;PID&gt;</code></li>
-</ol>
+<div class="highlight highlight-source-shell"><pre class="notranslate"></pre></div>
 </li>
 </ul>
+<p>services:<br>
+oj-backend:<br>
+ports:<br>
+- "8088:8888"  # 原来是 "80:8888"<br>
+```<br>
+5.  保存退出（按 <code class="notranslate">Ctrl+O</code> 写入 -&gt; 回车 -&gt; `Ctrl+X` 退出）。<br>
+6.  重新执行 `docker-compose up -d`。*   <strong>解决方法 B：终止占用进程</strong><br>
+1.  查找占用进程：`sudo lsof -i :80` 或 `sudo netstat -tuln | grep :80`<br>
+2.  记下 PID（进程号），然后终止它：`sudo kill -9 `</p>
 <hr>
 <h4>🔑 四、 设置超级管理员（新手最容易卡住的地方）</h4>
 <p>部署完成后，通过浏览器访问 <code class="notranslate">http://你的IP:端口</code>（如果改了端口就是 <code class="notranslate">http://你的IP:8088</code>）。</p>
