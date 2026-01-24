@@ -203,14 +203,14 @@ Error response from daemon: failed to set up container networking: dri
 </ul>
 <hr>
 <h2><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji> 三、部署完成后的注意事项</h2>
-<h3>1、系统访问与初始配置</h3>
+<h3>1、系统访问</h3>
 <p>部署完成后，通过浏览器访问 <a href="http://localhost:8088" rel="nofollow">http://localhost:8088</a> 即可进入 Hydro 系统。</p>
-<h3>2、首次使用需要注意以下事项：</h3>
+<h3>2、系统默认注册测评账号：</h3>
 <p>系统会默认注册一个 uid 为 2 的测评账号：<br>
 • <strong>用户名</strong>：<code class="notranslate">judge</code><br>
 • <strong>密码</strong>：<code class="notranslate">examplepassword</code></p>
 <h3>3、重要提醒：</h3>
-<p>请务必及时修改默认密码，并同步更新 <code class="notranslate">/hydro/Hydro/install/docker/judge/judge.yaml</code> 配置文件中的 <code class="notranslate">password</code> 密码，<strong>否则可能导致测评功能异常。</strong></p>
+<p>请登录后台务必及时修改默认密码，并同步更新 <code class="notranslate">/hydro/Hydro/install/docker/judge/judge.yaml</code> 配置文件中的 <code class="notranslate">password</code> 密码，<strong>否则可能导致测评功能异常。</strong></p>
 <h3>4、特别注意 Ubuntu 和 Docker 部署的 Hydro，操作命令不一样。</h3>
 <p>安装完成后，在浏览器访问 <strong><a href="http://ip:8088" rel="nofollow">http://ip:8088</a></strong> 时，在首页提示如下：<br>
 ■ 在右上角注册一个账号。<br>

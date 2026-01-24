@@ -145,16 +145,16 @@ sudo kill -9 <PID>
 
 ##  ⚠️ 三、部署完成后的注意事项
 
-### 1、系统访问与初始配置
+### 1、系统访问
 部署完成后，通过浏览器访问 http://localhost:8088 即可进入 Hydro 系统。
 
-### 2、首次使用需要注意以下事项： 
+### 2、系统默认注册测评账号： 
 系统会默认注册一个 uid 为 2 的测评账号： 
 • **用户名**：`judge` 
 • **密码**：`examplepassword`  
 
 ### 3、重要提醒：
-请务必及时修改默认密码，并同步更新 `/hydro/Hydro/install/docker/judge/judge.yaml` 配置文件中的 `password` 密码，**否则可能导致测评功能异常。**
+请登录后台务必及时修改默认密码，并同步更新 `/hydro/Hydro/install/docker/judge/judge.yaml` 配置文件中的 `password` 密码，**否则可能导致测评功能异常。**
 
 ###  4、特别注意 Ubuntu 和 Docker 部署的 Hydro，操作命令不一样。
 
