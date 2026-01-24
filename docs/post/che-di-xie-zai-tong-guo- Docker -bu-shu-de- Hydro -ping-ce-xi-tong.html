@@ -130,7 +130,27 @@ docker rmi <span class="pl-k">&lt;</span>image_id_or_name<span class="pl-k">&gt;
 <li>查看容器：<code class="notranslate">docker ps -a</code> (不应再看到 <code class="notranslate">oj-backend</code> 或 <code class="notranslate">hydro</code> 相关的容器)</li>
 <li>查看目录：<code class="notranslate">ls /hydro</code> (应提示 "No such file or directory")</li>
 </ul>
-<p>完成这些步骤后，Hydro 及其所有数据就已从你的系统中彻底移除了。</p></div>
+<h3>🔍 第五步：删除源码目录或配置文件的备份目录</h3>
+<p>前面执行的 <code class="notranslate">sudo rm -rf /hydro</code> 只删除了根目录下的挂载点数据，而 <code class="notranslate">/root/Hydro</code> 通常是源代码克隆目录或配置文件的备份目录。为了彻底卸载，我们还需要把这个目录也删除。</p>
+<p>请按照以下步骤操作，确保彻底清理：</p>
+<h4>1. 删除残留的源码目录</h4>
+<p>在终端执行以下命令，删除 <code class="notranslate">/root</code> 目录下的 <code class="notranslate">Hydro</code> 文件夹：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">sudo rm -rf /root/Hydro</pre></div>
+<h4>2. 验证目录是否已删除</h4>
+<p>你可以通过以下命令检查目录是否还存在（如果不存在，终端不会有任何输出，这是正常的）：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">ls -la /root/Hydro</pre></div>
+<h3>3. （可选）检查是否还有其他相关文件</h3>
+<p>有时候在 <code class="notranslate">/home</code> 目录或其他地方也可能有相关文件。如果你记得安装时的操作路径，建议也检查一下：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 检查你的家目录（如果是 root 用户，家目录就是 /root）</span>
+ls -la <span class="pl-k">~</span> <span class="pl-k">|</span> grep -i hydro</pre></div>
+<h3>4. 最终确认</h3>
+<p>至此，你应该已经完成了以下清理工作：</p>
+<ul>
+<li><strong>容器</strong>：已通过 <code class="notranslate">docker-compose down</code> 停止并移除。</li>
+<li><strong>数据</strong>：已通过 <code class="notranslate">rm -rf /hydro</code> 删除核心数据卷。</li>
+<li><strong>源码/配置</strong>：已通过 <code class="notranslate">rm -rf /root/Hydro</code> 删除源码目录。</li>
+</ul>
+<p>完成以上这些步骤后，Hydro 及其所有数据就已从你的系统中彻底移除了。</p></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
