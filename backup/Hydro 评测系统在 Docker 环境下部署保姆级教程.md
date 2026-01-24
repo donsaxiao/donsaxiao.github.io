@@ -75,12 +75,12 @@
 *   **用户名**：`judge`
 *   **密码**：`examplepassword`
 *   **⚠️ 重要提醒**：出于安全考虑，**登录后台，请务必及时修改这个密码**。
-    *   修改后，你还需要同步修改配置文件 `/hydro/Hydro/install/docker/judge/judge.yaml` 中的 `password` 字段。
+    *   修改后，还需同步修改配置文件 `/hydro/Hydro/install/docker/judge/judge.yaml` 中的 `password` 字段。
     *   使用 `nano` 修改配置文件：
-        1. 使用编辑器打开配置文件：`nano /hydro/Hydro/install/docker/judge/judge.yaml`
-        2. 找到 `password` 将 `examplepassword` **修改成你最新的密码**。
-        3. 修改后，保存并退出（按 `Ctrl+O` 写入 -> 回车 -> `Ctrl+X` 退出 -> 输入 `Y` 保存 -> 回车）。
-        4. 最后重启对应的 Docker 容器（在 `cd /hydro/Hydro/install/` 目录下用 `docker-compose restart` 重启服务）
+        1.  使用编辑器打开配置文件：`nano /hydro/Hydro/install/docker/judge/judge.yaml`
+        2.  找到 `password` 将 `examplepassword` **修改成你最新的密码**。
+        3.  修改后，保存并退出（按 `Ctrl+O` 写入 -> 回车 -> `Ctrl+X` 退出 -> 输入 `Y` 保存 -> 回车）。
+        4.  最后重启对应的 Docker 容器（在 `cd /hydro/Hydro/install/` 目录下用 `docker-compose restart` 重启服务）
     *   **后果**：如果不修改配置文件中的密码，系统将无法进行代码测评。
 
 **2. 端口被占用怎么办？**
