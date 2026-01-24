@@ -148,10 +148,17 @@ git clone https://github.com/hydro-dev/Hydro.git
 <ul>
 <li><strong>用户名</strong>：<code class="notranslate">judge</code></li>
 <li><strong>密码</strong>：<code class="notranslate">examplepassword</code></li>
-<li><strong><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji> 重要提醒</strong>：出于安全考虑，<strong>请务必及时修改这个密码</strong>。
+<li><strong><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji> 重要提醒</strong>：出于安全考虑，<strong>登录后台，请务必及时修改这个密码</strong>。
 <ul>
-<li>修改后，你还需要同步修改配置文件 <code class="notranslate">/hydro/Hydro/install/docker/judge/judge.yaml</code> 中的 <code class="notranslate">password</code> 字段。<br>
-（<strong>本地目录</strong> ./judge/judge.yaml，<strong>挂载卷</strong> /root/.hydro/judge.yaml）</li>
+<li>修改后，你还需要同步修改配置文件 <code class="notranslate">/hydro/Hydro/install/docker/judge/judge.yaml</code> 中的 <code class="notranslate">password</code> 字段。</li>
+<li>使用 <code class="notranslate">nano</code> 修改配置文件：
+<ol>
+<li>使用编辑器打开配置文件：<code class="notranslate">nano /hydro/Hydro/install/docker/judge/judge.yaml</code></li>
+<li>找到 <code class="notranslate">password</code> 将 <code class="notranslate">examplepassword</code> <strong>修改成你最新的密码</strong>。</li>
+<li>修改后，保存并退出（按 <code class="notranslate">Ctrl+O</code> 写入 -&gt; 回车 -&gt; <code class="notranslate">Ctrl+X</code> 退出 -&gt; 输入 <code class="notranslate">Y</code> 保存 → 回车）。</li>
+<li>最后重启对应的 Docker 容器（在 <code class="notranslate">cd /hydro/Hydro/install/</code> 目录下用 <code class="notranslate">docker-compose restart</code> 重启服务）</li>
+</ol>
+</li>
 <li><strong>后果</strong>：如果不修改配置文件中的密码，系统将无法进行代码测评。</li>
 </ul>
 </li>
