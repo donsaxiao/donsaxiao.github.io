@@ -130,7 +130,7 @@ docker rmi <span class="pl-k">&lt;</span>image_id_or_name<span class="pl-k">&gt;
 <li>查看容器：<code class="notranslate">docker ps -a</code> (不应再看到 <code class="notranslate">oj-backend</code> 或 <code class="notranslate">hydro</code> 相关的容器)</li>
 <li>查看目录：<code class="notranslate">ls /hydro</code> (应提示 "No such file or directory")</li>
 </ul>
-<h3>🔍 第五步：删除源码目录或配置文件的备份目录</h3>
+<h3>🗑️  第五步：删除源码目录或配置文件的备份目录</h3>
 <p>前面执行的 <code class="notranslate">sudo rm -rf /hydro</code> 只删除了根目录下的挂载点数据，而 <code class="notranslate">/root/Hydro</code> 通常是源代码克隆目录或配置文件的备份目录。为了彻底卸载，我们还需要把这个目录也删除。</p>
 <p>请按照以下步骤操作，确保彻底清理：</p>
 <h4>1. 删除残留的源码目录</h4>
