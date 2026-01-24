@@ -150,7 +150,8 @@ git clone https://github.com/hydro-dev/Hydro.git
 <li><strong>密码</strong>：<code class="notranslate">examplepassword</code></li>
 <li><strong><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji> 重要提醒</strong>：出于安全考虑，<strong>请务必及时修改这个密码</strong>。
 <ul>
-<li>修改后，你还需要同步修改配置文件 <code class="notranslate">/hydro/Hydro/install/docker/judge/judge.yaml</code>（./judge/judge.yaml:/root/.hydro/judge.yaml） 中的 <code class="notranslate">password</code> 字段。</li>
+<li>修改后，你还需要同步修改配置文件 <code class="notranslate">/hydro/Hydro/install/docker/judge/judge.yaml</code> 中的 <code class="notranslate">password</code> 字段。<br>
+（<strong>本地目录</strong> ./judge/judge.yaml，<strong>挂载卷</strong> /root/.hydro/judge.yaml）</li>
 <li><strong>后果</strong>：如果不修改配置文件中的密码，系统将无法进行代码测评。</li>
 </ul>
 </li>

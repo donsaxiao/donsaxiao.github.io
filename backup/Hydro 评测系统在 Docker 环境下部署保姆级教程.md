@@ -75,7 +75,8 @@
 *   **用户名**：`judge`
 *   **密码**：`examplepassword`
 *   **⚠️ 重要提醒**：出于安全考虑，**请务必及时修改这个密码**。
-    *   修改后，你还需要同步修改配置文件 `/hydro/Hydro/install/docker/judge/judge.yaml`（./judge/judge.yaml:/root/.hydro/judge.yaml） 中的 `password` 字段。
+    *   修改后，你还需要同步修改配置文件 `/hydro/Hydro/install/docker/judge/judge.yaml` 中的 `password` 字段。
+       （**本地目录** ./judge/judge.yaml，**挂载卷** /root/.hydro/judge.yaml） 
     *   **后果**：如果不修改配置文件中的密码，系统将无法进行代码测评。
 
 **2. 端口被占用怎么办？**
