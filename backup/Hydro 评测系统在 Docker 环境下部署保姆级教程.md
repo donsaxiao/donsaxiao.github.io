@@ -105,7 +105,7 @@ Error response from daemon: failed to set up container networking: dri
               ports:
                 - "8088:8888"  # 原来是 "80:8888"
          ```
-    5.  保存退出（按 `Ctrl+O` 写入 -> 回车 -> `Ctrl+X` 退出 -> 输入 `Y` 保存 → 回车）。
+    5.  保存退出（按 `Ctrl+O` 写入 -> 回车 -> `Ctrl+X` 退出 -> 输入 `Y` 保存 -> 回车）。
     6.  重新执行 `docker-compose up -d`。
     
 *   **解决方法 B：终止占用进程**
