@@ -116,11 +116,34 @@ git clone https://github.com/hydro-dev/Hydro.git </pre></div>
 <p>执行启动命令：</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">docker-compose up -d</pre></div>
 <ul>
-<li>这个过程会根据网络情况自动搭建，大约需要5-30分钟，全程无需人工干预。</li>
-<li>命令执行完成后运行 <code class="notranslate">docker ps -a</code>，当看到所有的容器的状态没有 <code class="notranslate">Exited (x) xxx</code> 就代表 OJ 已经启动成功。</li>
-<li><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji> 注意<br>
-安装过程中，系统会默认注册一个 uid 为 2 的测评账号。<strong>用户名：</strong> <code class="notranslate">judge</code>，<strong>密码：</strong> <code class="notranslate">examplepassword</code>。请务必及时修改密码。修改该账号密码后，还要再修改 <code class="notranslate">/hydro/Hydro/install/docker/judge/judge.yaml</code> 中的 <code class="notranslate">password</code>。<strong>否则可能会无法测评</strong>。</li>
-<li><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji> 正常情况下你的安装会是顺利的，但不排除会出现<strong>端口被占用</strong>的情况（如下）。</li>
+<li>
+<p>这个过程会根据网络情况自动搭建，大约需要5-30分钟，全程无需人工干预。</p>
+</li>
+<li>
+<p>命令执行完成后运行 <code class="notranslate">docker ps -a</code>，当看到所有的容器的状态没有 <code class="notranslate">Exited (x) xxx</code> 就代表 OJ 已经启动成功。</p>
+</li>
+<li>
+<p><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji> <strong>重要提醒</strong><br>
+安装过程中，系统会默认注册一个 uid 为 2 的测评账号。<br>
+<strong>用户名：</strong> <code class="notranslate">judge</code><br>
+<strong>密码：</strong> <code class="notranslate">examplepassword</code></p>
+<ul>
+<li>出于安全考虑，请登录后台<strong>及时修改 judge 的默认密码</strong>。</li>
+<li>修改后，你还需要同步修改配置文件 <code class="notranslate">/hydro/Hydro/install/docker/judge/judge.yaml</code> 中的 <code class="notranslate">password</code> 字段。</li>
+<li>使用 <code class="notranslate">nano</code> 修改配置文件：
+<ol>
+<li>使用编辑器打开配置文件：<code class="notranslate">nano /hydro/Hydro/install/docker/judge/judge.yaml</code></li>
+<li>找到 <code class="notranslate">password</code> 将 <code class="notranslate">examplepassword</code> <strong>修改成你最新的密码</strong>。</li>
+<li>修改后，保存并退出（按 <code class="notranslate">Ctrl+O</code> 写入 -&gt; 回车 -&gt; <code class="notranslate">Ctrl+X</code> 退出 -&gt; 输入 <code class="notranslate">Y</code> 保存 → 回车）。</li>
+<li>最后重启对应的 Docker 容器（在 <code class="notranslate">cd /hydro/Hydro/install/</code> 目录下用 <code class="notranslate">docker-compose restart</code> 重启服务）</li>
+</ol>
+</li>
+<li><strong>后果</strong>：如果不修改配置文件中的密码，<strong>系统将无法进行代码测评</strong>。</li>
+</ul>
+</li>
+<li>
+<p><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji> 正常情况下你的安装会是顺利的，但不排除会出现<strong>端口被占用</strong>的情况（如下）。</p>
+</li>
 </ul>
 <hr>
 <h2>💡 二、端口被占用的补充说明和处理办法</h2>
@@ -183,11 +206,11 @@ Error response from daemon: failed to set up container networking: dri
 <h3>1、系统访问与初始配置</h3>
 <p>部署完成后，通过浏览器访问 <a href="http://localhost:8088" rel="nofollow">http://localhost:8088</a> 即可进入 Hydro 系统。</p>
 <h3>2、首次使用需要注意以下事项：</h3>
-<p><strong>系统会默认注册一个 uid 为 2 的测评账号：</strong><br>
+<p>系统会默认注册一个 uid 为 2 的测评账号：<br>
 • <strong>用户名</strong>：<code class="notranslate">judge</code><br>
 • <strong>密码</strong>：<code class="notranslate">examplepassword</code></p>
 <h3>3、重要提醒：</h3>
-<p><strong>请务必及时修改默认密码</strong>，并同步更新 <code class="notranslate">/hydro/Hydro/install/docker/judge/judge.yaml</code> 配置文件中的 <code class="notranslate">password</code> 密码，<strong>否则可能导致测评功能异常。</strong></p>
+<p>请务必及时修改默认密码，并同步更新 <code class="notranslate">/hydro/Hydro/install/docker/judge/judge.yaml</code> 配置文件中的 <code class="notranslate">password</code> 密码，<strong>否则可能导致测评功能异常。</strong></p>
 <h3>4、特别注意 Ubuntu 和 Docker 部署的 Hydro，操作命令不一样。</h3>
 <p>安装完成后，在浏览器访问 <strong><a href="http://ip:8088" rel="nofollow">http://ip:8088</a></strong> 时，在首页提示如下：<br>
 ■ 在右上角注册一个账号。<br>

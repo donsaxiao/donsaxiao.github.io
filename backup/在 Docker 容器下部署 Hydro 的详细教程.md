@@ -61,8 +61,20 @@ docker-compose up -d
 
 - 这个过程会根据网络情况自动搭建，大约需要5-30分钟，全程无需人工干预。
 - 命令执行完成后运行 `docker ps -a`，当看到所有的容器的状态没有 `Exited (x) xxx` 就代表 OJ 已经启动成功。
-- ⚠️ 注意
-安装过程中，系统会默认注册一个 uid 为 2 的测评账号。**用户名：** `judge`，**密码：** `examplepassword`。请务必及时修改密码。修改该账号密码后，还要再修改 `/hydro/Hydro/install/docker/judge/judge.yaml` 中的 `password`。**否则可能会无法测评**。
+- ⚠️ **重要提醒**
+    安装过程中，系统会默认注册一个 uid 为 2 的测评账号。
+    **用户名：** `judge`
+    **密码：** `examplepassword`
+
+    * 出于安全考虑，请登录后台**及时修改 judge 的默认密码**。
+    * 修改后，你还需要同步修改配置文件 `/hydro/Hydro/install/docker/judge/judge.yaml` 中的 `password` 字段。
+    * 使用 `nano` 修改配置文件：
+      1. 使用编辑器打开配置文件：`nano /hydro/Hydro/install/docker/judge/judge.yaml`
+      2. 找到 `password` 将 `examplepassword` **修改成你最新的密码**。
+      3. 修改后，保存并退出（按 `Ctrl+O` 写入 -> 回车 -> `Ctrl+X` 退出 -> 输入 `Y` 保存 → 回车）。
+      4. 最后重启对应的 Docker 容器（在 `cd /hydro/Hydro/install/` 目录下用 `docker-compose restart` 重启服务）
+    * **后果**：如果不修改配置文件中的密码，**系统将无法进行代码测评**。
+
 - ⚠️ 正常情况下你的安装会是顺利的，但不排除会出现**端口被占用**的情况（如下）。
 
 ---
@@ -137,12 +149,12 @@ sudo kill -9 <PID>
 部署完成后，通过浏览器访问 http://localhost:8088 即可进入 Hydro 系统。
 
 ### 2、首次使用需要注意以下事项： 
- **系统会默认注册一个 uid 为 2 的测评账号：** 
+系统会默认注册一个 uid 为 2 的测评账号： 
 • **用户名**：`judge` 
 • **密码**：`examplepassword`  
 
 ### 3、重要提醒：
- **请务必及时修改默认密码**，并同步更新 `/hydro/Hydro/install/docker/judge/judge.yaml` 配置文件中的 `password` 密码，**否则可能导致测评功能异常。**
+请务必及时修改默认密码，并同步更新 `/hydro/Hydro/install/docker/judge/judge.yaml` 配置文件中的 `password` 密码，**否则可能导致测评功能异常。**
 
 ###  4、特别注意 Ubuntu 和 Docker 部署的 Hydro，操作命令不一样。
 
