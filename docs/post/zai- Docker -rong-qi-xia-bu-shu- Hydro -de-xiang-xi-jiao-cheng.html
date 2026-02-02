@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://donsaxiao.github.io/post/zai-%20Docker%20-rong-qi-xia-bu-shu-%20Hydro%20-de-xiang-xi-jiao-cheng.html">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/96248528?v=4">
 <title>在 Docker 容器下部署 Hydro 的详细教程</title>
-<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
+
 
 
 </head>
@@ -95,26 +95,32 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <h2>🟢 一、快速安装步骤详解</h2>
 <h3>1. 创建目标目录</h3>
 <p>首先，你需要创建 <code class="notranslate">/hydro</code> 文件夹。因为这是在根目录下创建文件夹，需要管理员权限：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">sudo mkdir /hydro</pre></div>
+<pre lang="bash" class="notranslate"><code class="notranslate">sudo mkdir /hydro
+</code></pre>
 <p><em>(系统可能会要求你输入密码，输入后按回车即可)</em></p>
 <h3>2. 修改文件夹权限（关键步骤，下面2个方法二选一）</h3>
 <p>默认情况下，<code class="notranslate">sudo mkdir</code> 创建的文件夹属于 <code class="notranslate">root</code> 用户。但你日常运行 Docker 或者操作代码通常使用的是普通用户（比如你的 <code class="notranslate">donsa</code> 用户）。为了避免后续操作出现“权限被拒绝”的错误，建议将该文件夹的所有者改为你的当前用户。</p>
 <p><strong>方法2.1 假设你的用户名是 <code class="notranslate">donsa</code>，请运行：</strong></p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">sudo chown -R donsa:donsa /hydro</pre></div>
+<pre lang="bash" class="notranslate"><code class="notranslate">sudo chown -R donsa:donsa /hydro
+</code></pre>
 <p><em>(注意：请将 <code class="notranslate">donsa:donsa</code> 替换为你实际的用户名，冒号前面是用户，后面是组)</em></p>
 <p><strong>方法2.2 也可以用 $USER:$USER 来直接修改文件夹权限</strong></p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">sudo chown -R <span class="pl-smi">$USER</span>:<span class="pl-smi">$USER</span> /hydro</pre></div>
+<pre lang="bash" class="notranslate"><code class="notranslate">sudo chown -R $USER:$USER /hydro
+</code></pre>
 <p><em>(此命令将/hydro目录的所有权更改为当前用户，避免后续操作出现权限问题。$USER会自动替换为当前用户名)</em></p>
 <h3>3. 克隆项目代码</h3>
 <p>现在进入 <code class="notranslate">/hydro</code> 目录并执行命令克隆Hydro项目到本地：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c1">cd</span> /hydro
-git clone https://github.com/hydro-dev/Hydro.git </pre></div>
+<pre lang="bash" class="notranslate"><code class="notranslate">cd /hydro
+git clone https://github.com/hydro-dev/Hydro.git 
+</code></pre>
 <h3>4. 进入安装目录</h3>
 <p>下载完成后，进入 Docker 安装目录：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c1">cd</span> Hydro/install/docker</pre></div>
+<pre lang="bash" class="notranslate"><code class="notranslate">cd Hydro/install/docker
+</code></pre>
 <h3>5. 启动 Docker 服务</h3>
 <p>执行启动命令：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">docker-compose up -d</pre></div>
+<pre lang="bash" class="notranslate"><code class="notranslate">docker-compose up -d
+</code></pre>
 <ul>
 <li>
 <p>这个过程会根据网络情况自动搭建，大约需要5-30分钟，全程无需人工干预。</p>
@@ -162,34 +168,41 @@ Error response from daemon: failed to set up container networking: dri
 <h3>解决方法</h3>
 <h4>1. 查找并终止占用 80 端口的进程</h4>
 <p>运行以下命令查看是哪个进程在占用 80 端口：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">sudo lsof -i :80</pre></div>
+<pre lang="bash" class="notranslate"><code class="notranslate">sudo lsof -i :80
+</code></pre>
 <p>或</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">sudo netstat -tuln <span class="pl-k">|</span> grep :80</pre></div>
+<pre lang="bash" class="notranslate"><code class="notranslate">sudo netstat -tuln | grep :80
+</code></pre>
 <p>输出结果中会显示 PID（进程 ID）和进程名。例如，如果看到 <code class="notranslate">nginx</code> 或 <code class="notranslate">apache2</code> 或另一个 <code class="notranslate">docker-proxy</code> 进程，你可以终止它：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">sudo <span class="pl-c1">kill</span> -9 <span class="pl-k">&lt;</span>PID<span class="pl-k">&gt;</span></pre></div>
+<pre lang="bash" class="notranslate"><code class="notranslate">sudo kill -9 &lt;PID&gt;
+</code></pre>
 <p>（将 <code class="notranslate">&lt;PID&gt;</code> 替换为实际的进程 ID）</p>
 <h4>2. 修改 Hydro 的端口（如果需要保留 <code class="notranslate">Nginx</code>）</h4>
 <p>如果你必须保留 <code class="notranslate">Nginx</code> 占用 80 端口，可以修改 Hydro 的端口映射（例如将 80 改为 8080或8088）：</p>
 <ol>
 <li>
 <p>进入 Hydro 的 Docker 配置目录：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c1">cd</span> /hydro/Hydro/install/docker</pre></div>
+<pre lang="bash" class="notranslate"><code class="notranslate">cd /hydro/Hydro/install/docker
+</code></pre>
 </li>
 <li>
 <p>编辑 <code class="notranslate">docker-compose.yml</code> 文件：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">nano docker-compose.yml</pre></div>
+<pre lang="bash" class="notranslate"><code class="notranslate">nano docker-compose.yml
+</code></pre>
 </li>
 <li>
 <p>找到 <code class="notranslate">oj-backend</code> 的 <code class="notranslate">ports</code> 配置，将 <code class="notranslate">80:8888</code> 改为 <code class="notranslate">8088:8888</code>（或其他未被占用的端口）：</p>
-<div class="highlight highlight-source-yaml"><pre class="notranslate"><span class="pl-ent">services</span>:
-  <span class="pl-ent">oj-backend</span>:
-    <span class="pl-ent">ports</span>:
-      - <span class="pl-s"><span class="pl-pds">"</span>8088:8888<span class="pl-pds">"</span></span>  <span class="pl-c"><span class="pl-c">#</span> 原来是 "80:8888"</span></pre></div>
+<pre lang="yaml" class="notranslate"><code class="notranslate">services:
+  oj-backend:
+    ports:
+      - "8088:8888"  # 原来是 "80:8888"
+</code></pre>
 <p><strong>修改后，并保存退出</strong>（<code class="notranslate">Ctrl+O</code> 写入 -&gt; 回车 -&gt; <code class="notranslate">Ctrl+X</code>退出 -&gt; 输入 <code class="notranslate">Y</code> 保存 -&gt; 回车）。</p>
 </li>
 <li>
 <p>重新启动 Docker 服务（安装 Hydro）：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">docker-compose up -d</pre></div>
+<pre lang="bash" class="notranslate"><code class="notranslate">docker-compose up -d
+</code></pre>
 </li>
 </ol>
 <h3>📌 预防措施</h3>
@@ -228,16 +241,19 @@ Error response from daemon: failed to set up container networking: dri
 <li>
 <p><strong>进入容器</strong><br>
 复制并执行以下命令，进入 Hydro 的后端容器：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">docker <span class="pl-c1">exec</span> -it oj-backend sh</pre></div>
+<pre lang="bash" class="notranslate"><code class="notranslate">docker exec -it oj-backend sh
+</code></pre>
 <ul>
 <li>提示：如果报错 <code class="notranslate">sh</code> 不可用，可以尝试 <code class="notranslate">bash</code>（虽然该镜像通常只包含轻量级的 <code class="notranslate">sh</code>）。</li>
 </ul>
-<div class="highlight highlight-source-shell"><pre class="notranslate">docker <span class="pl-c1">exec</span> -it oj-backend bash</pre></div>
+<pre lang="bash" class="notranslate"><code class="notranslate">docker exec -it oj-backend bash
+</code></pre>
 </li>
 <li>
 <p><strong>执行命令，设置超级管理员</strong><br>
 进入容器后，你会看到命令行提示符变成了 <code class="notranslate">#</code>。此时直接执行初始化命令：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">hydrooj cli user setSuperAdmin 3</pre></div>
+<pre lang="bash" class="notranslate"><code class="notranslate">hydrooj cli user setSuperAdmin 3
+</code></pre>
 <ul>
 <li><strong>注意</strong>：在安装过程中，系统已经默认注册了一个 uid 为 2 的测评账号。<strong>用户名：</strong> <code class="notranslate">judge</code>，<strong>密码：</strong> <code class="notranslate">examplepassword</code>。请务必及时修改密码。修改该账号密码后，同时还要再修改 <code class="notranslate">/hydro/Hydro/install/docker/judge/judge.yaml</code> 中的 <code class="notranslate">password</code>。<strong>否则可能会无法测评</strong>。</li>
 </ul>
@@ -249,13 +265,15 @@ Error response from daemon: failed to set up container networking: dri
 <p>如果你不想进入容器，也可以通过 <code class="notranslate">docker exec</code> 在容器内部直接运行单条命令。</p>
 <p><strong>设置超级管理员</strong><br>
 执行以下命令：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">docker <span class="pl-c1">exec</span> oj-backend hydrooj cli user setSuperAdmin 3</pre></div>
+<pre lang="bash" class="notranslate"><code class="notranslate">docker exec oj-backend hydrooj cli user setSuperAdmin 3
+</code></pre>
 <p><strong>关于 <code class="notranslate">pm2</code> 的说明</strong><br>
 在 Docker 部署中，<strong>不需要</strong>手动重启 <code class="notranslate">pm2</code>。</p>
 <ul>
 <li>容器内的进程是由 Docker 管理的（通过 <code class="notranslate">entrypoint.sh</code> 启动）。</li>
 <li>如果你需要重启服务，请重启整个容器，而不是容器内部的进程：
-<div class="highlight highlight-source-shell"><pre class="notranslate">docker restart oj-backend</pre></div>
+<pre lang="bash" class="notranslate"><code class="notranslate">docker restart oj-backend
+</code></pre>
 </li>
 </ul>
 <h3>总结</h3>
@@ -358,7 +376,8 @@ Error response from daemon: failed to set up container networking: dri
 <h3>🔑 第一步：取消超级管理员权限</h3>
 <p>您可以通过 Hydro CLI 命令行工具，将该用户的权限重置为普通用户权限（即默认权限）。</p>
 <p>在终端中执行以下命令：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">hydrooj cli user setPriv 2 1</pre></div>
+<pre lang="bash" class="notranslate"><code class="notranslate">hydrooj cli user setPriv 2 1
+</code></pre>
 <ul>
 <li><strong>命令解释</strong>：<code class="notranslate">setPriv</code> 用于设置用户权限。参数 <code class="notranslate">2</code> 是用户的 UID，参数 <code class="notranslate">1</code> 是普通用户的默认权限值（<code class="notranslate">PRIV_DEFAULT</code>）。</li>
 <li><strong>效果</strong>：执行后，该账号将不再拥有任何管理员特权，变回一个刚注册的普通用户。</li>
@@ -368,7 +387,8 @@ Error response from daemon: failed to set up container networking: dri
 <p><strong>正确权限：<code class="notranslate">PRIV_JUDGE</code></strong></p>
 <p>您需要通过 CLI 命令，将 <code class="notranslate">PRIV_JUDGE</code> 权限赋予该账号。</p>
 <p>在终端中执行以下命令：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">hydrooj cli user setJudge 2</pre></div>
+<pre lang="bash" class="notranslate"><code class="notranslate">hydrooj cli user setJudge 2
+</code></pre>
 <ul>
 <li><strong>命令解释</strong>：<code class="notranslate">setJudge</code> 是一个便捷命令，专门用于将指定用户设置为评测账号，它会自动为其添加 <code class="notranslate">PRIV_JUDGE</code> 权限。</li>
 <li><strong>效果</strong>：该账号现在拥有了评测机连接和工作的所有必要权限，但没有其他管理员权限，这是最安全的配置。</li>
