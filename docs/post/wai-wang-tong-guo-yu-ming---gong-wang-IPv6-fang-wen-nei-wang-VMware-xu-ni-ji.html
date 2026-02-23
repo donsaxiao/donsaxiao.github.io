@@ -35,7 +35,7 @@
 <meta property="og:url" content="https://donsaxiao.github.io/post/wai-wang-tong-guo-yu-ming---gong-wang-IPv6-fang-wen-nei-wang-VMware-xu-ni-ji.html">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/96248528?v=4">
 <title>外网通过域名/公网IPv6访问内网VMware虚拟机</title>
-<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
+
 
 
 </head>
@@ -476,9 +476,10 @@ http://192.168.100.101:335（目标虚拟机服务端口）
 <ol>
 <li>以 <strong>管理员身份</strong> 打开 PowerShell/CMD</li>
 <li>执行 <code class="notranslate">netsh interface portproxy</code> 命令添加转发规则（以下命令每次只能执行一条，且要退出360卫士才能执行命令）：
-<div class="highlight highlight-source-batchfile"><pre class="notranslate"><span class="pl-k">netsh</span> interface portproxy add v6tov4 listenaddress=240e:XXXX:XXXX:XXXX::911 listenport=<span class="pl-c1">9000</span> connectaddress=192.168.100.102 connectport=<span class="pl-c1">9000</span>
-<span class="pl-k">netsh</span> interface portproxy add v6tov4 listenaddress=240e:XXXX:XXXX:XXXX::911 listenport=<span class="pl-c1">8081</span> connectaddress=192.168.100.103 connectport=<span class="pl-c1">80</span>
-<span class="pl-k">netsh</span> interface portproxy add v6tov4 listenaddress=240e:XXXX:XXXX:XXXX::911 listenport=<span class="pl-c1">8080</span> connectaddress=192.168.100.104 connectport=<span class="pl-c1">80</span></pre></div>
+<pre lang="cmd" class="notranslate"><code class="notranslate">netsh interface portproxy add v6tov4 listenaddress=240e:XXXX:XXXX:XXXX::911 listenport=9000 connectaddress=192.168.100.102 connectport=9000
+netsh interface portproxy add v6tov4 listenaddress=240e:XXXX:XXXX:XXXX::911 listenport=8081 connectaddress=192.168.100.103 connectport=80
+netsh interface portproxy add v6tov4 listenaddress=240e:XXXX:XXXX:XXXX::911 listenport=8080 connectaddress=192.168.100.104 connectport=80
+</code></pre>
 </li>
 <li>命令补充说明：
 <ul>
