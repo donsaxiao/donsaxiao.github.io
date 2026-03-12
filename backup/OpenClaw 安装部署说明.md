@@ -42,3 +42,8 @@ bash -c "$(curl -sSL https://resource.fit2cloud.com/1panel/package/v2/quick_star
 ```
 ## 步骤五：镜像加速器配置并设置默认参数
 Docker安装完成后，会如下图所示会分别提醒是否配置镜像加速并逐步提醒设置1Panel的端口、安全入口以及面板用户密码等，根据个人情况完成设置即可。其中端口需要保证已开通。
+
+<img width="1268" height="761" alt="Image" src="https://github.com/user-attachments/assets/9c3e4239-53e4-4ab6-8058-6060eb7e7666" />
+
+
+
