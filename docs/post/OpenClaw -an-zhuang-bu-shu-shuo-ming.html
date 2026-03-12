@@ -83,9 +83,9 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
 </div>
     <div id="content">
-<div class="markdown-body" id="postBody"><p>本文档主要介绍 OpenClaw 在 Linux 客户端或者服务器上的安装部署过程。推荐使用开源的 Linux 运维管理面板1Panel 进行安装部署，整个过程简单快捷。OpenClaw安装完成后，也可通过 1Panel 运维管理面板快速完成飞书渠道对接配置，方便大家快速实现基于飞书的个人 AI 助理。</p>
+<div class="markdown-body" id="postBody"><p>本文档主要介绍 OpenClaw 在 Linux 客户端或者服务器上的安装部署过程。推荐使用开源的 Linux 运维管理面板1Panel 进行安装部署，整个过程简单快捷。OpenClaw 安装完成后，也可通过 1Panel 运维管理面板快速完成飞书渠道对接配置，方便大家快速实现基于飞书的个人 AI 助理。</p>
 <h1>一、资源环境准备</h1>
-<h3>本次OpenClaw安装部署需要准备以下资源环境：</h3>
+<h3>本次 OpenClaw 安装部署需要准备以下资源环境：</h3>
 <p>• 客户端或服务器准备：<br>
 • 操作系统：支持主流 Linux 发行版本（基于 Debian / RedHat，包括国产操作系统）<br>
 • 服务器架构：x86_64、aarch64<br>
@@ -101,19 +101,19 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <p>基于以上环境，我们可以分为1Panel安装部署、大语言模型API Key准备、OpenClaw安装部署以及飞书渠道配置四部分完成整个安装部署过程，具体参见如下详细说明文档。</p>
 <h1>二、1Panel 安装部署</h1>
 <p>1Panel安装部署时首先登录到Linux客户端或服务器端，然后按照以下过程快速部署即可：</p>
-<h2>步骤 2.1：获取root权限</h2>
-<p>登录服务器后首先输入如下命令切换至root权限。</p>
+<h2>步骤 2.1：获取 root 权限</h2>
+<p>登录服务器后首先输入如下命令切换至 root 权限。</p>
 <pre class="notranslate"><code class="notranslate">sudo su -
 </code></pre>
 <h2>步骤 2.2：执行在线安装命令</h2>
 <p>输入以下在线安装脚本命令开始执行安装。</p>
 <pre class="notranslate"><code class="notranslate">bash -c "$(curl -sSL https://resource.fit2cloud.com/1panel/package/v2/quick_start.sh) "
 </code></pre>
-<h2>步骤 2.3：指定1Panel安装目录</h2>
+<h2>步骤 2.3：指定 1Panel 安装目录</h2>
 <p>安装脚本会首先提醒设置指定安装目录，没有特殊情况直接回车选择默认即可。</p>
 <pre class="notranslate"><code class="notranslate">设置1Panel 安装目录（默认为 /opt）：
 </code></pre>
-<h2>步骤 2.4：完成Docker的安装</h2>
+<h2>步骤 2.4：完成 Docker 的安装</h2>
 <p>指定目录后，安装脚本会自动检测当前服务器是否安装Docker，未安装时，会询是否安装，此处输入“y”确认安装即可。</p>
 <pre class="notranslate"><code class="notranslate">检测到未安装 Docker，是否安装[y/n]: y
 </code></pre>
@@ -121,10 +121,10 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <p>Docker安装完成后，会如下图所示会分别提醒是否配置镜像加速并逐步提醒设置1Panel的端口、安全入口以及面板用户密码等，根据个人情况完成设置即可。其中端口需要保证已开通。</p>
 <p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/9c3e4239-53e4-4ab6-8058-6060eb7e7666"><img width="1268" height="761" alt="Image" src="https://github.com/user-attachments/assets/9c3e4239-53e4-4ab6-8058-6060eb7e7666" style="max-width: 100%; height: auto; max-height: 761px;"></a></p>
 <h2>步骤 2.6：</h2>
-<p>获取1Panel面板的登录信息 统一设置完成后，系统会自动打印出1Panel的登录访问信息，如下图所示，大家保存方便后续使用。</p>
+<p>获取 1Panel 面板的登录信息 统一设置完成后，系统会自动打印出 1Panel 的登录访问信息，如下图所示，大家保存方便后续使用。</p>
 <p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/b644d916-3357-466d-8939-576d5fee2420"><img width="1268" height="707" alt="Image" src="https://github.com/user-attachments/assets/b644d916-3357-466d-8939-576d5fee2420" style="max-width: 100%; height: auto; max-height: 707px;"></a></p>
 <h2>步骤 2.7：</h2>
-<p>验证1Panel部署成功 将步骤六中获取的外部地址输入浏览器即可进入1Panel面板登录页面，输入对应的面板用户和密码，确认1Panel已经安装部署完成。</p>
+<p>验证 1Panel 部署成功 将步骤六中获取的外部地址输入浏览器即可进入 1Panel 面板登录页面，输入对应的面板用户和密码，确认 1Panel 已经安装部署完成。</p>
 <p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/9b813094-3c96-4864-a276-6dbffaa43e92"><img width="1268" height="761" alt="Image" src="https://github.com/user-attachments/assets/9b813094-3c96-4864-a276-6dbffaa43e92" style="max-width: 100%; height: auto; max-height: 761px;"></a></p>
 <h2>步骤 2.8：</h2>
 <p>1Panel访问地址设置 进入面板后，切换到“面板设置”页面，将默认访问地址设置为1Panel访问的公网IP，方便后续部署的应用可以通过点击“跳转”按钮进行访问。</p>
@@ -168,7 +168,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <p>进入 OpenClaw 页面后，输入信息看AI助理是否回复，如有正常回复，如下图所示，说明确认 OpenClaw 部署成功。</p>
 <p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/0c9d2743-4580-4cb5-a027-413939378e7a"><img width="1044" height="648" alt="Image" src="https://github.com/user-attachments/assets/0c9d2743-4580-4cb5-a027-413939378e7a" style="max-width: 100%; height: auto; max-height: 648px;"></a></p>
 <h1>五、飞书渠道配置</h1>
-<p>截止目前，整个OpenClaw已经完全部署完成，我们接着在配置下飞书渠道。配置飞书渠道我们首先需要在飞书中创建一个可用的机器人，参照如下步骤逐步完成即可。 说明：本次介绍使用的是飞书个人账号，如果是企业账号则版本发布以及权限授权需要进行管理员审批，其他操作步骤一致。</p>
+<p><strong>截止目前，整个 OpenClaw 已经完全部署完成</strong>，我们接着在配置下飞书渠道。配置飞书渠道我们首先需要在飞书中创建一个可用的机器人，参照如下步骤逐步完成即可。 说明：本次介绍使用的是飞书个人账号，如果是企业账号则版本发布以及权限授权需要进行管理员审批，其他操作步骤一致。</p>
 <h2>步骤 5.1：</h2>
 <p>创建企业自建应用 首先我们登录飞书进入飞书开放平台（链接：<code class="notranslate">https://open.feishu.cn/app?lang=zh-CN</code>）进入「开发者后台」，选择「企业自建应用」，点击「创建企业自建应用」，如下图所示：</p>
 <p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/3a0246d1-32fd-4159-b6e3-77800ac07072"><img width="1054" height="651" alt="Image" src="https://github.com/user-attachments/assets/3a0246d1-32fd-4159-b6e3-77800ac07072" style="max-width: 100%; height: auto; max-height: 651px;"></a></p>
@@ -223,7 +223,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <p>点击「下一步，确认新增权限」，并最终确保所有权限均已开通。其中个人用户自行确认企业账户需要管理员审核。确保所有权限均已开通，如下图所示：</p>
 <p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/7388726e-e6fd-4085-a6b0-ca2c6ef742ac"><img width="1268" height="787" alt="Image" src="https://github.com/user-attachments/assets/7388726e-e6fd-4085-a6b0-ca2c6ef742ac" style="max-width: 100%; height: auto; max-height: 787px;"></a></p>
 <h2>步骤 5.4：</h2>
-<p>获取凭证并1Panel配置 进入飞书平台在「凭证与基础信息」中获取应用凭证，如下图所示：</p>
+<p>获取凭证并 1Panel 配置 进入飞书平台在「凭证与基础信息」中获取应用凭证，如下图所示：</p>
 <p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/1ef71d6f-e11c-4db5-9f15-a61eb723f786"><img width="1267" height="616" alt="Image" src="https://github.com/user-attachments/assets/1ef71d6f-e11c-4db5-9f15-a61eb723f786" style="max-width: 100%; height: auto; max-height: 616px;"></a></p>
 <p>获取后，进入 1Panel 的「智能体」的「配置」页面，完成飞书聊天渠道配置，点击保存，如下图所示：</p>
 <p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/5d577c80-0347-4d1b-9400-3b10748584ff"><img width="1266" height="746" alt="Image" src="https://github.com/user-attachments/assets/5d577c80-0347-4d1b-9400-3b10748584ff" style="max-width: 100%; height: auto; max-height: 746px;"></a></p>
