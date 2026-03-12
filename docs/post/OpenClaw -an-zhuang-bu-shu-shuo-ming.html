@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://donsaxiao.github.io/post/OpenClaw%20-an-zhuang-bu-shu-shuo-ming.html">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/96248528?v=4">
 <title>OpenClaw 安装部署说明</title>
-
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
 
 
 </head>
@@ -135,7 +135,119 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <h1>大语言模型 API 申请</h1>
 <p>大家可以参加 OpenClaw 官网支持的模型列表，分别获取大语言模型的 API Key，本次以 DeepSeek 为例。其它公有模型和本地模型大家自行参考相关文档准备。</p>
 <h2>步骤一：</h2>
-<p>DeepSeek 开发者平台注册 进入DeepSeek 开发者平台：<code class="notranslate">https://platform.deepseek.com/ </code>，首先完成个人实名认证并注册，并完成充值。如下图所示：</p></div>
+<p>DeepSeek 开发者平台注册 进入DeepSeek 开发者平台：<code class="notranslate">https://platform.deepseek.com/ </code>，首先完成个人实名认证并注册，并完成充值。如下图所示：</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/b783864e-6b79-4f9d-98cb-54abd0c34072"><img width="1069" height="620" alt="Image" src="https://github.com/user-attachments/assets/b783864e-6b79-4f9d-98cb-54abd0c34072" style="max-width: 100%; height: auto; max-height: 620px;"></a></p>
+<h2>步骤二：</h2>
+<p>获取 DeepSeek 的 API key 如下图所示，进入API keys，点击创建 API key，创建完成后将 API Key 妥善保管，方便后续使用</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/6dd61aa0-3864-4e7f-9156-fafdb38a0782"><img width="1267" height="578" alt="Image" src="https://github.com/user-attachments/assets/6dd61aa0-3864-4e7f-9156-fafdb38a0782" style="max-width: 100%; height: auto; max-height: 578px;"></a></p>
+<h1>OpenClaw 安装部署</h1>
+<p>OpenClaw 的安装基于1Panel的智能体管理进行部署，在部署过程中我们需要结合上一步骤 DeepSeek 大模型的 API key。在1Panel 中将 OpenClaw 的部署以及大模型 API key 账号的管理分为两部分进行，将二者进行了解绑，主要是为了方便大家进行 OpenClaw 个人助理的模型配置调整。</p>
+<h2>步骤一：</h2>
+<p>添加模型账号 进入「AI」管理中的「智能体」管理菜单，点击进入后首先切换进入「模型账号」管理，点击「添加模型账号」，然后按照模型账号创建要求选择模型供应商并输入模型账号信息，完成模型账号创建。</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/89ef633d-3439-419e-a656-4eb97ddf9443"><img width="1265" height="545" alt="Image" src="https://github.com/user-attachments/assets/89ef633d-3439-419e-a656-4eb97ddf9443" style="max-width: 100%; height: auto; max-height: 545px;"></a></p>
+<h2>步骤二：</h2>
+<p>创建智能体 准备好模型账号后，切换进入「智能体」，点击创建智能体，根据要求输入相关参数即可。具体参见如下图所示：</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/7cd3c7ba-31d4-458b-a991-bce8f99f6f01"><img width="1269" height="736" alt="Image" src="https://github.com/user-attachments/assets/7cd3c7ba-31d4-458b-a991-bce8f99f6f01" style="max-width: 100%; height: auto; max-height: 736px;"></a></p>
+<p>其中创建智能体过程中的参数定义参见如下详细说明：<br>
+• 名称：默认openclaw，可以自定义作为容器的名称；<br>
+• 应用版本：指 OpenClaw 的版本，如上图默认为当前最新的版本2026.2.9；<br>
+• WebUI 端口：OpenClaw 默认的端口为18789，可自行定义端口且确保已开通；<br>
+• Bridge 端口：OpenClaw 默认的端口为18790，可自行定义端口且确保已开通；<br>
+• 模型供应商：当前支持的模型如图所示，这里选择刚才添加的 DeepSeek 模型供应商，如果已添加对应模型供应商的模型，则会直接提醒模型账号数量；</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/ac59b423-5ed3-4daf-9c64-e67813e19cc4"><img width="1064" height="736" alt="Image" src="https://github.com/user-attachments/assets/ac59b423-5ed3-4daf-9c64-e67813e19cc4" style="max-width: 100%; height: auto; max-height: 736px;"></a></p>
+<p>• 其他模型参数：<br>
+选择模型供应商后，系统会自动获取已经维护的模型账号，如下图所示，也可勾选「手动输入模型」自行输入，如未创建模型账号，点击「创建模型账号」完成创建即可。</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/79688605-077c-4f1c-ae84-95c68c2b773c"><img width="1154" height="1038" alt="Image" src="https://github.com/user-attachments/assets/79688605-077c-4f1c-ae84-95c68c2b773c" style="max-width: 100%; height: auto; max-height: 1038px;"></a></p>
+<p>• Token：为 OpenClaw 的 Web UI 访问地址的 token，这里系统会自动生成，方便后续直接访问。<br>
+• 其他参数：其他参数均保持默认配置即可。<br>
+以上参数配置完成后，直接点击确认，OpenClaw 开始安装。直到如下图所示，代表完成安装。</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/a7b1a7a0-066a-405d-8705-cb31c07fb184"><img width="933" height="645" alt="Image" src="https://github.com/user-attachments/assets/a7b1a7a0-066a-405d-8705-cb31c07fb184" style="max-width: 100%; height: auto; max-height: 645px;"></a></p>
+<h2>步骤三：</h2>
+<p>验证 OpenClaw 部署成功 OpenClaw 安装部署完成后，进入智能体列表页面，如下图所示，点击 WebUI 直接跳转即可进入OpenClaw页面。</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/d875c833-aa58-42f7-8ed0-3b1934665d0c"><img width="1049" height="369" alt="Image" src="https://github.com/user-attachments/assets/d875c833-aa58-42f7-8ed0-3b1934665d0c" style="max-width: 100%; height: auto; max-height: 369px;"></a></p>
+<p>进入 OpenClaw 页面后，输入信息看AI助理是否回复，如有正常回复，如下图所示，说明确认 OpenClaw 部署成功。</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/0c9d2743-4580-4cb5-a027-413939378e7a"><img width="1044" height="648" alt="Image" src="https://github.com/user-attachments/assets/0c9d2743-4580-4cb5-a027-413939378e7a" style="max-width: 100%; height: auto; max-height: 648px;"></a></p>
+<h1>飞书渠道配置</h1>
+<p>截止目前，整个OpenClaw已经完全部署完成，我们接着在配置下飞书渠道。配置飞书渠道我们首先需要在飞书中创建一个可用的机器人，参照如下步骤逐步完成即可。 说明：本次介绍使用的是飞书个人账号，如果是企业账号则版本发布以及权限授权需要进行管理员审批，其他操作步骤一致。</p>
+<h2>步骤一：</h2>
+<p>创建企业自建应用 首先我们登录飞书进入飞书开放平台（链接：<code class="notranslate">https://open.feishu.cn/app?lang=zh-CN</code>）进入「开发者后台」，选择「企业自建应用」，点击「创建企业自建应用」，如下图所示：</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/3a0246d1-32fd-4159-b6e3-77800ac07072"><img width="1054" height="651" alt="Image" src="https://github.com/user-attachments/assets/3a0246d1-32fd-4159-b6e3-77800ac07072" style="max-width: 100%; height: auto; max-height: 651px;"></a></p>
+<p>如下图所示，根据要求输入相关应用名称以及基本信息点击创建即可。</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/779d7859-fc9f-42dc-a7ed-2886965270c7"><img width="802" height="697" alt="Image" src="https://github.com/user-attachments/assets/779d7859-fc9f-42dc-a7ed-2886965270c7" style="max-width: 100%; height: auto; max-height: 697px;"></a></p>
+<h2>步骤二：</h2>
+<p>创建机器人 如下图所示，点击创建机器人，完成机器人创建。</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/78982fbe-937e-4a36-bb73-2d6479c3e62d"><img width="1266" height="829" alt="Image" src="https://github.com/user-attachments/assets/78982fbe-937e-4a36-bb73-2d6479c3e62d" style="max-width: 100%; height: auto; max-height: 829px;"></a></p>
+<p>进入机器人页面后，点击机器人配置后的编辑按钮，定义机器人名称，如下图所示：</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/5de74678-93a9-4367-9764-230dd4378c89"><img width="1268" height="817" alt="Image" src="https://github.com/user-attachments/assets/5de74678-93a9-4367-9764-230dd4378c89" style="max-width: 100%; height: auto; max-height: 817px;"></a></p>
+<h2>步骤三：</h2>
+<p>权限配置 完成机器人创建后，点击进入「权限管理」，并点击「批量导入/导出权限」。</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/bc217f3c-48ce-47b4-ad63-5438a35e079c"><img width="1268" height="814" alt="Image" src="https://github.com/user-attachments/assets/bc217f3c-48ce-47b4-ad63-5438a35e079c" style="max-width: 100%; height: auto; max-height: 814px;"></a></p>
+<p>点击「批量导入/导出权限」，清空默认配置权限信息，将如下所示权限授权脚本复制粘贴，点击保存即可。</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">{
+  <span class="pl-s"><span class="pl-pds">"</span>scopes<span class="pl-pds">"</span></span>: {
+    <span class="pl-s"><span class="pl-pds">"</span>tenant<span class="pl-pds">"</span></span>: [
+      <span class="pl-s"><span class="pl-pds">"</span>aily:file:read<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>aily:file:write<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>application:application.app_message_stats.overview:readonly<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>application:application:self_manage<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>application:bot.menu:write<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>cardkit:card:write<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>contact:contact.base:readonly<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>contact:user.employee_id:readonly<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>corehr:file:download<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>docs:document.content:read<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>event:ip_list<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>im:chat<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>im:chat.access_event.bot_p2p_chat:read<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>im:chat.members:bot_access<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>im:message<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>im:message.group_at_msg:readonly<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>im:message.group_msg<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>im:message.p2p_msg:readonly<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>im:message:readonly<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>im:message:send_as_bot<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>im:resource<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>sheets:spreadsheet<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>wiki:wiki:readonly<span class="pl-pds">"</span></span>
+    ],
+    <span class="pl-s"><span class="pl-pds">"</span>user<span class="pl-pds">"</span></span>: [
+      <span class="pl-s"><span class="pl-pds">"</span>aily:file:read<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>aily:file:write<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>contact:contact.base:readonly<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>im:chat.access_event.bot_p2p_chat:read<span class="pl-pds">"</span></span>
+    ]
+  }
+}</pre></div>
+<p>以上代码复制粘贴后，效果如下图所示：</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/ff71dbd4-a5c4-480e-a3ac-75eabab4cb57"><img width="1269" height="1065" alt="Image" src="https://github.com/user-attachments/assets/ff71dbd4-a5c4-480e-a3ac-75eabab4cb57" style="max-width: 100%; height: auto; max-height: 1065px;"></a></p>
+<p>点击「下一步，确认新增权限」，并最终确保所有权限均已开通。其中个人用户自行确认企业账户需要管理员审核。确保所有权限均已开通，如下图所示：</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/7388726e-e6fd-4085-a6b0-ca2c6ef742ac"><img width="1268" height="787" alt="Image" src="https://github.com/user-attachments/assets/7388726e-e6fd-4085-a6b0-ca2c6ef742ac" style="max-width: 100%; height: auto; max-height: 787px;"></a></p>
+<h2>步骤四：</h2>
+<p>获取凭证并1Panel配置 进入飞书平台在「凭证与基础信息」中获取应用凭证，如下图所示：</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/1ef71d6f-e11c-4db5-9f15-a61eb723f786"><img width="1267" height="616" alt="Image" src="https://github.com/user-attachments/assets/1ef71d6f-e11c-4db5-9f15-a61eb723f786" style="max-width: 100%; height: auto; max-height: 616px;"></a></p>
+<p>获取后，进入 1Panel 的「智能体」的「配置」页面，完成飞书聊天渠道配置，点击保存，如下图所示：</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/5d577c80-0347-4d1b-9400-3b10748584ff"><img width="1266" height="746" alt="Image" src="https://github.com/user-attachments/assets/5d577c80-0347-4d1b-9400-3b10748584ff" style="max-width: 100%; height: auto; max-height: 746px;"></a></p>
+<h2>步骤五：</h2>
+<p>创建事件与回调 如下图所示，进入「事件与回调」菜单，分别完成订阅方式设置以及事件添加。</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/1cf82f61-5c63-4407-833c-d3e14cee29d3"><img width="1197" height="694" alt="Image" src="https://github.com/user-attachments/assets/1cf82f61-5c63-4407-833c-d3e14cee29d3" style="max-width: 100%; height: auto; max-height: 694px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/ab12bc7f-6b51-4266-b9d7-7cbdf0766381"><img width="1197" height="694" alt="Image" src="https://github.com/user-attachments/assets/ab12bc7f-6b51-4266-b9d7-7cbdf0766381" style="max-width: 100%; height: auto; max-height: 694px;"></a></p>
+<h4>订阅方式设置：</h4>
+<p>参照如下图选择长链接订阅方式：</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/84c8f44e-b06b-4bad-8557-eff7133a6255"><img width="1267" height="574" alt="Image" src="https://github.com/user-attachments/assets/84c8f44e-b06b-4bad-8557-eff7133a6255" style="max-width: 100%; height: auto; max-height: 574px;"></a></p>
+<h4>添加事件：</h4>
+<p>输入 <code class="notranslate">im.message.receive_v1</code> 搜索，基于「应用身份订阅」勾选接收消息，最后确认添加即可。</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/23567245-56f1-4bca-a9c7-f85f9f02cc96"><img width="937" height="803" alt="Image" src="https://github.com/user-attachments/assets/23567245-56f1-4bca-a9c7-f85f9f02cc96" style="max-width: 100%; height: auto; max-height: 803px;"></a></p>
+<h2>步骤六：</h2>
+<p>创建并发布版本 确认完成后点击「创建版本」，然后根据要求输入版本相关信息并发布，个人账号无需审批，企业账号需要进行企业审批。</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/30c39858-c729-4d06-9276-ca71a84e7909"><img width="1266" height="912" alt="Image" src="https://github.com/user-attachments/assets/30c39858-c729-4d06-9276-ca71a84e7909" style="max-width: 100%; height: auto; max-height: 912px;"></a></p>
+<h2>步骤七：</h2>
+<p>飞书渠道验证确认 以上信息配置完成后，我们进入飞书客户端，如下图打开应用：</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/f9ead217-7263-4859-a4ee-994192239483"><img width="1268" height="736" alt="Image" src="https://github.com/user-attachments/assets/f9ead217-7263-4859-a4ee-994192239483" style="max-width: 100%; height: auto; max-height: 736px;"></a></p>
+<p>最后我们再进行简单尝试，如下图所示即代表配置成功。</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/f9931135-a2fa-46f5-a261-656eb90bfde9"><img width="1266" height="738" alt="Image" src="https://github.com/user-attachments/assets/f9931135-a2fa-46f5-a261-656eb90bfde9" style="max-width: 100%; height: auto; max-height: 738px;"></a></p>
+<h1>模型配置修改</h1>
+<p>如果在 OpenClaw 个人 AI 助理使用时，需要切换模型，同样进入「智能体」列表，点击「配置」，进入模型切换菜单，完成模型配置修改点击「保存」即可。如下图所示：</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/b5a315a2-18b3-43d6-92e1-79e44b8243d2"><img width="1265" height="396" alt="Image" src="https://github.com/user-attachments/assets/b5a315a2-18b3-43d6-92e1-79e44b8243d2" style="max-width: 100%; height: auto; max-height: 396px;"></a></p></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
