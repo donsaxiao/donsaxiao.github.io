@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="https://avatars.githubusercontent.com/u/96248528?v=4"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="Hydro 作为新一代高效强大的信息学在线测评系统，通过 Docker 容器化部署能够实现快速安装和环境隔离。">
+<meta property="og:title" content="在 Docker 容器下部署 Hydro 的详细教程">
+<meta property="og:description" content="Hydro 作为新一代高效强大的信息学在线测评系统，通过 Docker 容器化部署能够实现快速安装和环境隔离。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://donsaxiao.github.io/post/zai-%20Docker%20-rong-qi-xia-bu-shu-%20Hydro%20-de-xiang-xi-jiao-cheng.html">
+<meta property="og:image" content="https://avatars.githubusercontent.com/u/96248528?v=4">
+<title>在 Docker 容器下部署 Hydro 的详细教程</title>
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+.copy-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    color: var(--color-fg-on-emphasis);
+    background-color: var(--color-fg-muted);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 12px;
+}
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">在 Docker 容器下部署 Hydro 的详细教程</h1>
+<div class="title-right">
+    <a href="https://donsaxiao.github.io" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/donsaxiao/donsaxiao.github.io/issues/9" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><p>Hydro 作为新一代高效强大的信息学在线测评系统，通过 Docker 容器化部署能够实现快速安装和环境隔离。本文将详细介绍Hydro 的 Docker 部署方案，帮助你在容器化环境下实现高效运行（本文同样适合在 1panel 下部署）。</p>
+<h3>为什么选择 Docker 部署 Hydro？</h3>
+<p>Docker 部署 Hydro 具有多重优势：环境隔离确保系统稳定性，快速部署减少配置时间，资源隔离提高运行效率。特别适合需要快速搭建测评环境的教育机构和竞赛组织者。</p>
+<h3>准备工作与环境要求</h3>
+<p>在开始部署前，请确保您的系统满足以下条件：<br>
+• Docker环境：已安装Docker和Docker Compose<br>
+• Linux系统：推荐使用Linux操作系统<br>
+• 磁盘空间：至少2GB可用空间<br>
+• 网络连接：稳定的网络连接用于下载依赖</p>
+<h2>🟢 一、快速安装步骤详解</h2>
+<h3>1. 创建目标目录</h3>
+<p>首先，你需要创建 <code class="notranslate">/hydro</code> 文件夹。因为这是在根目录下创建文件夹，需要管理员权限：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">sudo mkdir /hydro</pre></div>
+<p><em>(系统可能会要求你输入密码，输入后按回车即可)</em></p>
+<h3>2. 修改文件夹权限（关键步骤，下面2个方法二选一）</h3>
+<p>默认情况下，<code class="notranslate">sudo mkdir</code> 创建的文件夹属于 <code class="notranslate">root</code> 用户。但你日常运行 Docker 或者操作代码通常使用的是普通用户（比如你的 <code class="notranslate">donsa</code> 用户）。为了避免后续操作出现“权限被拒绝”的错误，建议将该文件夹的所有者改为你的当前用户。</p>
+<p><strong>方法2.1 假设你的用户名是 <code class="notranslate">donsa</code>，请运行：</strong></p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">sudo chown -R donsa:donsa /hydro</pre></div>
+<p><em>(注意：请将 <code class="notranslate">donsa:donsa</code> 替换为你实际的用户名，冒号前面是用户，后面是组)</em></p>
+<p><strong>方法2.2 也可以用 $USER:$USER 来直接修改文件夹权限</strong></p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">sudo chown -R <span class="pl-smi">$USER</span>:<span class="pl-smi">$USER</span> /hydro</pre></div>
+<p><em>(此命令将/hydro目录的所有权更改为当前用户，避免后续操作出现权限问题。$USER会自动替换为当前用户名)</em></p>
+<h3>3. 克隆项目代码</h3>
+<p>现在进入 <code class="notranslate">/hydro</code> 目录并执行命令克隆Hydro项目到本地：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c1">cd</span> /hydro
+git clone https://github.com/hydro-dev/Hydro.git </pre></div>
+<h3>4. 进入安装目录</h3>
+<p>下载完成后，进入 Docker 安装目录：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c1">cd</span> Hydro/install/docker</pre></div>
+<h3>5. 启动 Docker 服务</h3>
+<p>执行启动命令：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker-compose up -d</pre></div>
+<ul>
+<li>
+<p>这个过程会根据网络情况自动搭建，大约需要5-30分钟，全程无需人工干预。</p>
+</li>
+<li>
+<p>命令执行完成后运行 <code class="notranslate">docker ps -a</code>，当看到所有的容器的状态没有 <code class="notranslate">Exited (x) xxx</code> 就代表 OJ 已经启动成功。</p>
+</li>
+<li>
+<p><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji> <strong>重要提醒</strong><br>
+安装过程中，系统会默认注册一个 uid 为 2 的测评账号。<br>
+<strong>用户名：</strong> <code class="notranslate">judge</code><br>
+<strong>密码：</strong> <code class="notranslate">examplepassword</code></p>
+<ul>
+<li>出于安全考虑，请登录后台<strong>及时修改 judge 的默认密码</strong>。</li>
+<li>修改后，你还需要同步修改配置文件 <code class="notranslate">/hydro/Hydro/install/docker/judge/judge.yaml</code> 中的 <code class="notranslate">password</code> 字段。</li>
+<li>使用 <code class="notranslate">nano</code> 修改配置文件：
+<ol>
+<li>使用编辑器打开配置文件：<code class="notranslate">nano /hydro/Hydro/install/docker/judge/judge.yaml</code></li>
+<li>找到 <code class="notranslate">password</code> 将 <code class="notranslate">examplepassword</code> <strong>修改成你最新的密码</strong>。</li>
+<li>修改后，保存并退出（按 <code class="notranslate">Ctrl+O</code> 写入 -&gt; 回车 -&gt; <code class="notranslate">Ctrl+X</code> 退出 -&gt; 输入 <code class="notranslate">Y</code> 保存 -&gt; 回车）。</li>
+<li>最后重启对应的 Docker 容器：<br>
+（在 <code class="notranslate">cd /hydro/Hydro/install/docker</code> 目录下用 <code class="notranslate">docker-compose restart</code> 重启服务）。</li>
+</ol>
+</li>
+<li><strong>后果</strong>：如果不修改配置文件中的密码，<strong>系统将无法进行代码测评</strong>。</li>
+</ul>
+</li>
+<li>
+<p><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji> 正常情况下你的安装会是顺利的，但不排除会出现<strong>端口被占用</strong>的情况（如下）。</p>
+</li>
+</ul>
+<hr>
+<h2>💡 二、端口被占用的补充说明和处理办法</h2>
+<ul>
+<li><strong>如果提示端口占用</strong>：显示类似下面的内容</li>
+</ul>
+<pre class="notranslate"><code class="notranslate">WARN[0000] No services to build                         
+[+] up 3/3
+ ✔ Container oj-mongo   Healthy                                            6.5s 
+ ✔ Container oj-backend Created                                            0.0s 
+ ✔ Container oj-judge   Created                                            0.0s 
+Error response from daemon: failed to set up container networking: driver failed programming external connectivity on endpoint oj-backend (8a61cca3bd252522c3139b1b8480e36f47a03f5125c968fa1f307c10ab3b3459): failed to bind host port for 0.0.0.0:80:172.19.0.3:8888/tcp: address already in use
+</code></pre>
+<p>这说明你遇到的问题是 <strong>端口冲突</strong>，具体表现为 <code class="notranslate">oj-backend</code> 容器尝试绑定主机的 80 端口时失败，提示 <code class="notranslate">address already in use</code>。虽然你已经执行了 <code class="notranslate">docker-compose down</code> 和网络清理，但系统中仍有残留的进程或服务占用了 80 端口。</p>
+<h3>解决方法</h3>
+<h4>1. 查找并终止占用 80 端口的进程</h4>
+<p>运行以下命令查看是哪个进程在占用 80 端口：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">sudo lsof -i :80</pre></div>
+<p>或</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">sudo netstat -tuln <span class="pl-k">|</span> grep :80</pre></div>
+<p>输出结果中会显示 PID（进程 ID）和进程名。例如，如果看到 <code class="notranslate">nginx</code> 或 <code class="notranslate">apache2</code> 或另一个 <code class="notranslate">docker-proxy</code> 进程，你可以终止它：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">sudo <span class="pl-c1">kill</span> -9 <span class="pl-k">&lt;</span>PID<span class="pl-k">&gt;</span></pre></div>
+<p>（将 <code class="notranslate">&lt;PID&gt;</code> 替换为实际的进程 ID）</p>
+<h4>2. 修改 Hydro 的端口（如果需要保留 <code class="notranslate">Nginx</code>）</h4>
+<p>如果你必须保留 <code class="notranslate">Nginx</code> 占用 80 端口，可以修改 Hydro 的端口映射（例如将 80 改为 8080或8088）：</p>
+<ol>
+<li>
+<p>进入 Hydro 的 Docker 配置目录：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c1">cd</span> /hydro/Hydro/install/docker</pre></div>
+</li>
+<li>
+<p>编辑 <code class="notranslate">docker-compose.yml</code> 文件：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">nano docker-compose.yml</pre></div>
+</li>
+<li>
+<p>找到 <code class="notranslate">oj-backend</code> 的 <code class="notranslate">ports</code> 配置，将 <code class="notranslate">80:8888</code> 改为 <code class="notranslate">8088:8888</code>（或其他未被占用的端口）：</p>
+<div class="highlight highlight-source-yaml"><pre class="notranslate"><span class="pl-ent">services</span>:
+  <span class="pl-ent">oj-backend</span>:
+    <span class="pl-ent">ports</span>:
+      - <span class="pl-s"><span class="pl-pds">"</span>8088:8888<span class="pl-pds">"</span></span>  <span class="pl-c"><span class="pl-c">#</span> 原来是 "80:8888"</span></pre></div>
+<p><strong>修改后，并保存退出</strong>（<code class="notranslate">Ctrl+O</code> 写入 -&gt; 回车 -&gt; <code class="notranslate">Ctrl+X</code>退出 -&gt; 输入 <code class="notranslate">Y</code> 保存 -&gt; 回车）。</p>
+</li>
+<li>
+<p>重新启动 Docker 服务（安装 Hydro）：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker-compose up -d</pre></div>
+</li>
+</ol>
+<h3>📌 预防措施</h3>
+<ul>
+<li><strong>避免端口冲突</strong>：如果你的服务器上还有其他 Web 服务（如 Nginx），建议修改 Hydro 的端口映射。可以在 <code class="notranslate">docker-compose.yml</code> 文件中将 <code class="notranslate">80:8888</code> 改为其他未被占用的端口，例如 <code class="notranslate">8080:8888</code>。</li>
+<li><strong>定期清理</strong>：使用 <code class="notranslate">docker system prune -a</code> 可以定期清理所有未使用的容器、网络、镜像和构建缓存，避免残留资源导致冲突。</li>
+</ul>
+<h3>📌 最后提醒</h3>
+<ul>
+<li>如果你选择 <strong>修改 Hydro 端口为 8088</strong> ，在访问 Hydro 时需要加端口号（如：<code class="notranslate">http://IP:8088</code>）。</li>
+<li>上内容是解决端口被占用的解决方案，如果端口未占用，可以跳过，直接执行下面的步骤。</li>
+</ul>
+<hr>
+<h2><g-emoji class="g-emoji" alias="warning">⚠️</g-emoji> 三、部署完成后的注意事项</h2>
+<h3>1、系统访问</h3>
+<p>部署完成后，通过浏览器访问 <a href="http://localhost:8088" rel="nofollow">http://localhost:8088</a> 即可进入 Hydro 系统。</p>
+<h3>2、系统默认注册测评账号：</h3>
+<p>系统会默认注册一个 uid 为 2 的测评账号：<br>
+• <strong>用户名</strong>：<code class="notranslate">judge</code><br>
+• <strong>密码</strong>：<code class="notranslate">examplepassword</code></p>
+<h3>3、重要提醒：</h3>
+<p>请登录后台务必及时修改默认密码，并同步更新 <code class="notranslate">/hydro/Hydro/install/docker/judge/judge.yaml</code> 配置文件中的 <code class="notranslate">password</code> 密码，<strong>否则可能导致测评功能异常。</strong></p>
+<h3>4、特别注意 Ubuntu 和 Docker 部署的 Hydro，操作命令不一样。</h3>
+<p>安装完成后，在浏览器访问 <strong><a href="http://ip:8088" rel="nofollow">http://ip:8088</a></strong> 时，在首页提示如下：<br>
+■ 在右上角注册一个账号。<br>
+■ 回到刚刚的终端，使用 <code class="notranslate">hydrooj cli user setSuperAdmin 2</code> 将 UID 为 2 的用户设置为超级管理员。<br>
+■ 使用 <code class="notranslate">pm2 restart hydrooj</code> 重启以使管理员更改立刻生效。</p>
+<p>当你按照首页上的提示，在终端使用 <code class="notranslate">hydrooj cli user setSuperAdmin 2</code> 时，会出现 <code class="notranslate">hydrooj：未找到命令</code> ，这是一个非常典型的新手误区。</p>
+<p>简单来说：<strong>你试图在宿主机（你的 Ubuntu 系统）上执行只有在 Hydro 容器内部才能识别的命令。</strong></p>
+<p>因为你使用的是 <code class="notranslate">docker-compose</code> 部署，所有的服务（包括 Node.js 运行时和 pm2 进程管理器）都封装在隔离的容器里。宿主机（你现在操作的终端）并不认识 <code class="notranslate">hydrooj</code> 或 <code class="notranslate">pm2</code> 这些命令。</p>
+<p>👀 请按照以下步骤解决：</p>
+<hr>
+<h3>方法一：进入容器执行（推荐）</h3>
+<p>你需要先进入 <code class="notranslate">oj-backend</code> 容器的内部，才能执行这些命令。</p>
+<ol>
+<li>
+<p><strong>进入容器</strong><br>
+复制并执行以下命令，进入 Hydro 的后端容器：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker <span class="pl-c1">exec</span> -it oj-backend sh</pre></div>
+<ul>
+<li>提示：如果报错 <code class="notranslate">sh</code> 不可用，可以尝试 <code class="notranslate">bash</code>（虽然该镜像通常只包含轻量级的 <code class="notranslate">sh</code>）。</li>
+</ul>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker <span class="pl-c1">exec</span> -it oj-backend bash</pre></div>
+</li>
+<li>
+<p><strong>执行命令，设置超级管理员</strong><br>
+进入容器后，你会看到命令行提示符变成了 <code class="notranslate">#</code>。此时直接执行初始化命令：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">hydrooj cli user setSuperAdmin 3</pre></div>
+<ul>
+<li><strong>注意</strong>：在安装过程中，系统已经默认注册了一个 uid 为 2 的测评账号。<strong>用户名：</strong> <code class="notranslate">judge</code>，<strong>密码：</strong> <code class="notranslate">examplepassword</code>。请务必及时修改密码。修改该账号密码后，同时还要再修改 <code class="notranslate">/hydro/Hydro/install/docker/judge/judge.yaml</code> 中的 <code class="notranslate">password</code>。<strong>否则可能会无法测评</strong>。</li>
+</ul>
+<h3>如果误操作将 UID 为 2 的 <code class="notranslate">judge</code> 用户设置为超级管理员，请参考本文最后【 <strong>误操作 UID 为 2 的用户为超级管理员的解决办法</strong>】</h3>
+</li>
+</ol>
+<hr>
+<h3>方法二：如果必须在宿主机运行（使用完整路径）</h3>
+<p>如果你不想进入容器，也可以通过 <code class="notranslate">docker exec</code> 在容器内部直接运行单条命令。</p>
+<p><strong>设置超级管理员</strong><br>
+执行以下命令：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker <span class="pl-c1">exec</span> oj-backend hydrooj cli user setSuperAdmin 3</pre></div>
+<p><strong>关于 <code class="notranslate">pm2</code> 的说明</strong><br>
+在 Docker 部署中，<strong>不需要</strong>手动重启 <code class="notranslate">pm2</code>。</p>
+<ul>
+<li>容器内的进程是由 Docker 管理的（通过 <code class="notranslate">entrypoint.sh</code> 启动）。</li>
+<li>如果你需要重启服务，请重启整个容器，而不是容器内部的进程：
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker restart oj-backend</pre></div>
+</li>
+</ul>
+<h3>总结</h3>
+<ul>
+<li><strong>不要</strong>在宿主机（Ubuntu 终端）安装 <code class="notranslate">pm2</code> 或 <code class="notranslate">hydrooj</code>，它们属于容器内部环境。</li>
+<li><strong>所有</strong>涉及 <code class="notranslate">hydrooj</code> 的管理命令，都必须在 <code class="notranslate">docker exec</code> 进入容器后执行。</li>
+</ul>
+<hr>
+<h2>❓ 聪明你的会问：</h2>
+<h3>既然 Docker 不需要手动重启 pm2，那 <code class="notranslate">pm2 restart hydrooj</code> 这个命令在 Docker 中如何替代”?</h3>
+
+
+<p>在 Docker 部署中，确实<strong>不需要</strong>（通常也<strong>无法</strong>）在容器内部手动执行 <code class="notranslate">pm2 restart hydrooj</code>。这是因为 Docker 容器的设计理念是“不可变基础设施”，服务的生命周期由 Docker 本身管理，而不是容器内的进程管理器。</p>
+<p>要替代 <code class="notranslate">pm2 restart hydrooj</code> 的功能（即重启 Hydro 服务），你应该直接重启 Docker 容器本身。</p>
+<h3>✅ 最佳替代方案：重启容器</h3>
+<p>使用以下命令来重启 <code class="notranslate">oj-backend</code> 容器：</p>
+<pre class="notranslate"><code class="notranslate">docker restart oj-backend
+</code></pre>
+<p><strong>为什么这样可行？</strong></p>
+<ol>
+<li><strong>自动拉起</strong>：你的 <code class="notranslate">docker-compose.yml</code> 文件中配置了 <code class="notranslate">restart: always</code>（或者类似策略），这意味着只要容器停止（无论是正常停止还是崩溃），Docker 都会自动尝试重新启动它。</li>
+<li><strong>重新初始化</strong>：<code class="notranslate">docker restart</code> 会先优雅地停止容器，然后根据配置重新运行启动命令（通常是 <code class="notranslate">entrypoint.sh</code> 或直接运行 <code class="notranslate">hydrooj</code>）。这相当于在容器内部重启了整个应用进程，效果等同于重启 PM2 或 Node.js 进程。</li>
+</ol>
+<hr>
+<h3>🛠️ 补充：如果你必须进入容器内部操作</h3>
+<p>虽然不推荐，但如果你确实需要进入容器内部查看 PM2 状态或进行调试（例如确认进程是否挂起），可以使用以下命令：</p>
+<ol>
+<li><strong>进入容器终端</strong>：<pre class="notranslate"><code class="notranslate">docker exec -it oj-backend sh
+</code></pre>
+</li>
+<li><strong>在容器内部执行 PM2 命令</strong>（仅限调试）：<br>如果你确认容器内安装了 PM2 且你想手动控制：<pre class="notranslate"><code class="notranslate">pm2 restart hydrooj
+</code></pre>
+<em>注意：大多数轻量级 Docker 镜像为了精简体积，可能根本没装 <code class="notranslate">pm2</code> 命令行工具，或者它不在 PATH 环境变量中。因此，直接在宿主机上使用 <code class="notranslate">docker restart</code> 是最稳妥、最符合 Docker 规范的做法。</em></li>
+</ol>
+<h3>📌 总结</h3>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>操作目标</th>
+<th>宿主机（你的 Ubuntu）命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>重启 Hydro 服务</td>
+<td>docker restart oj-backend</td>
+<td>推荐做法。利用 Docker 的生命周期管理，最稳定。</td>
+</tr>
+<tr>
+<td>查看服务日志</td>
+<td>docker logs oj-backend</td>
+<td>替代 pm2 logs，查看输出内容。</td>
+</tr>
+<tr>
+<td>进入容器调试</td>
+<td>docker exec -it oj-backend sh</td>
+<td>只有在排查复杂问题时才需要进入内部。</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p>所以，下次你想“重启服务”时，只需敲下 <code class="notranslate">docker restart oj-backend</code> 即可。</p>
+
+
+
+<hr>
+<h2>🏠 四、Hydro 服务架构解析</h2>
+<p>Hydro的Docker部署包含三个核心服务：</p>
+<h3>1. 后端服务 (oj-backend)</h3>
+<p>• 基于Node.js 22构建<br>
+• 运行在8888端口<br>
+• 提供核心API功能</p>
+<h3>2. 测评服务 (oj-evaluator)</h3>
+<p>• 包含完整的编译器环境<br>
+• 支持多种编程语言<br>
+• 提供代码评测能力</p>
+<h3>3. 数据库服务 (oj-mongo)</h3>
+<p>• 使用MongoDB 7数据库<br>
+• 存储系统所有数据</p>
+<h3>配置详解与优化</h3>
+<p><strong>端口映射配置</strong>：默认配置中将主机的80端口映射到容器的8888端口。如需修改端口，请编辑 docker-compose.yml 文件中的端口映射设置。</p>
+<h3>测评服务编译器支持</h3>
+<p>测评服务默认安装了12种编译器：</p>
+<ol>
+<li>GCC (C语言编译器)</li>
+<li>Python3 (Python解释器)</li>
+<li>G++ (C++ 编译器)</li>
+<li>Free Pascal -compiler 编译器</li>
+<li>OpenJDK-17-jdk-headless (Java 开发工具包)</li>
+<li>PHP CLI (PHP 命令行接口)</li>
+<li>Rust 编译器</li>
+<li>Glasgow Haskell 编译器</li>
+<li>JavaScriptCore</li>
+<li>Go 语言</li>
+<li>Ruby</li>
+<li>Mono (.NET 框架)</li>
+</ol>
+<h2>五、误操作 UID 为 2 的用户为超级管理员的解决办法：</h2>
+<p>如果误操作使用了 <code class="notranslate">hydrooj cli user setSuperAdmin 2</code> 将 UID 为 2 的用户（这个用户就是：judge）设置为超级管理员。可以按照以下步骤进行处理，以取消并设置 judge 用户正确的权限：</p>
+<h3>🔑 第一步：取消超级管理员权限</h3>
+<p>您可以通过 Hydro CLI 命令行工具，将该用户的权限重置为普通用户权限（即默认权限）。</p>
+<p>在终端中执行以下命令：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">hydrooj cli user setPriv 2 1</pre></div>
+<ul>
+<li><strong>命令解释</strong>：<code class="notranslate">setPriv</code> 用于设置用户权限。参数 <code class="notranslate">2</code> 是用户的 UID，参数 <code class="notranslate">1</code> 是普通用户的默认权限值（<code class="notranslate">PRIV_DEFAULT</code>）。</li>
+<li><strong>效果</strong>：执行后，该账号将不再拥有任何管理员特权，变回一个刚注册的普通用户。</li>
+</ul>
+<h3>⚙️ 第二步：为测评账号设置正确权限</h3>
+<p>取消超级管理员权限后，该账号目前没有任何特殊权限。为了让它能作为评测机正常工作，您需要赋予它专门的评测权限。</p>
+<p><strong>正确权限：<code class="notranslate">PRIV_JUDGE</code></strong></p>
+<p>您需要通过 CLI 命令，将 <code class="notranslate">PRIV_JUDGE</code> 权限赋予该账号。</p>
+<p>在终端中执行以下命令：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">hydrooj cli user setJudge 2</pre></div>
+<ul>
+<li><strong>命令解释</strong>：<code class="notranslate">setJudge</code> 是一个便捷命令，专门用于将指定用户设置为评测账号，它会自动为其添加 <code class="notranslate">PRIV_JUDGE</code> 权限。</li>
+<li><strong>效果</strong>：该账号现在拥有了评测机连接和工作的所有必要权限，但没有其他管理员权限，这是最安全的配置。</li>
+</ul>
+<h3>📌 总结</h3>
+<p>通过以上两个步骤，您已经成功将该测评账号恢复到了正确的配置状态：</p>
+<ol>
+<li>先用 <code class="notranslate">setPriv 2 1</code> 移除了过高的超级管理员权限。</li>
+<li>再用 <code class="notranslate">setJudge 2</code> 添加了恰到好处的评测机专用权限。</li>
+</ol>
+<hr>
+<p>以上内容是 Donsa 原创，请尊重版权！</p></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://donsaxiao.github.io">动赛博客</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if(""!=""){
+    var startSite=new Date("");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行 "+diffDay+" 天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.disabled=true;
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","donsaxiao/donsaxiao.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const createClipboardHTML = (codeContent, additionalClasses = '') => `
+        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
+        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
+            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
+                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="${IconList["copy"]}"></path></svg>
+                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="${IconList["check"]}"></path></svg>
+            </clipboard-copy>
+            <div class="copy-feedback">Copied!</div>
+        </div>
+    `;
+
+    const handleCodeElements = (selector = '') => {
+        document.querySelectorAll(selector).forEach(codeElement => {
+            const codeContent = codeElement.innerHTML;
+            const newStructure = document.createElement('div');
+            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
+            newStructure.innerHTML = createClipboardHTML(codeContent);
+
+            const parentElement = codeElement.parentElement;
+            if (selector.includes('highlight')) {
+                parentElement.insertBefore(newStructure, codeElement.nextSibling);
+                parentElement.removeChild(codeElement);
+            } else {
+                parentElement.parentElement.replaceChild(newStructure, parentElement);
+            }
+        });
+    };
+
+    handleCodeElements('pre.notranslate > code.notranslate');
+    handleCodeElements('div.highlight > pre.notranslate');
+
+    let currentFeedback = null;
+    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
+        copyButton.addEventListener('click', () => {
+            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const copyIcon = copyButton.querySelector('.octicon-copy');
+            const checkIcon = copyButton.querySelector('.octicon-check');
+            const copyFeedback = copyButton.nextElementSibling;
+
+            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
+            currentFeedback = copyFeedback;
+
+            copyIcon.classList.add('d-none');
+            checkIcon.classList.remove('d-none');
+            copyFeedback.style.display = 'block';
+            copyButton.style.borderColor = 'var(--color-success-fg)';
+
+            setTimeout(() => {
+                copyIcon.classList.remove('d-none');
+                checkIcon.classList.add('d-none');
+                copyFeedback.style.display = 'none';
+                copyButton.style.borderColor = '';
+            }, 2000);
+        });
+    });
+});
+
+</script>
+
+
+</html>

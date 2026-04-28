@@ -1,0 +1,72 @@
+### 问：提交 netsh interface portproxy add 命令后，如何修改或删除之前提交的 IP 和端口？
+
+在 Windows 的 `netsh interface portproxy` 中，修改已存在的规则主要使用 **`set`** 命令，或者采用 **“先删除后添加”** 的策略。
+
+针对你之前提交的 `v6tov4`（IPv6 监听转 IPv4 目标）规则，以下是具体的修改方法：
+
+### 方法一：使用 `set` 命令（推荐，直接修改）
+
+这是最直接的方法，它会修改现有的映射关系，而不需要重新创建。
+
+**命令语法：**
+```cmd
+netsh interface portproxy set v6tov4 listenaddress=<原来的监听IP> listenport=<原来的监听端口> connectaddress=<新的目标IP> connectport=<新的目标端口>
+```
+
+**操作步骤：**
+假设你想把原来指向 `192.168.100.104:80` 的流量，修改为指向 `192.168.100.105:8080`，你需要执行：
+
+1.  **查看原规则**：确认原来的 `listenaddress` 和 `listenport` 是什么（虽然你不改它们，但命令里必须写上）。
+2.  **使用查看命令**：要是不确已添加的规则，可以使用以下命令查看。
+    ```cmd
+    netsh interface portproxy show all
+    ```
+3.  **执行修改命令**：    
+    ```cmd
+    netsh interface portproxy set v6tov4 listenaddress=2001:db8::100 listenport=8080 connectaddress=192.168.100.105 connectport=8080
+    ```
+    > **注意**：`set` 命令中必须包含原来的 `listenaddress` 和 `listenport` 作为“定位条件”，然后写上你想修改成的 `connectaddress` 和 `connectport`。
+
+---
+
+### 方法二：先 `delete` 再 `add`（通用，最稳妥）
+
+如果 `set` 命令在某些旧版本 Windows 中报错，或者你想修改监听端口（listenport），这种方法最保险。
+
+**命令语法：**
+```cmd
+# 1. 删除旧规则
+netsh interface portproxy delete v6tov4 listenaddress=<IP> listenport=<端口>
+
+# 2. 添加新规则
+netsh interface portproxy add v6tov4 listenaddress=<IP> listenport=<端口> connectaddress=<新IP> connectport=<新端口>
+```
+
+**操作步骤：**
+```cmd
+# 删除之前添加的规则
+netsh interface portproxy delete v6tov4 listenaddress=2001:db8::100 listenport=8080
+
+# 添加修改后的新规则
+netsh interface portproxy add v6tov4 listenaddress=2001:db8::100 listenport=8080 connectaddress=192.168.100.105 connectport=8080
+```
+
+---
+
+### 💡 常用辅助命令
+
+在修改之前，你可能需要查看当前的配置列表：
+
+*   **查看所有规则：**
+    ```cmd
+    netsh interface portproxy show all
+    ```
+*   **清除所有规则（慎用）：**
+    ```cmd
+    netsh interface portproxy reset
+    ```
+
+### ⚠️ 特别提醒
+1.  **管理员权限**：无论使用 `set` 还是 `delete`，都必须在**管理员权限**的 CMD 或 PowerShell 中运行。
+2.  **防火墙**：如果你修改了监听端口（例如从 8080 改为 8081），记得检查 Windows 防火墙是否放行了新的端口。
+3.  **IPv6 格式**：确保你的 IPv6 地址格式正确，如果地址包含缩写（如 `::`），最好写完整或保持与添加时一致。
