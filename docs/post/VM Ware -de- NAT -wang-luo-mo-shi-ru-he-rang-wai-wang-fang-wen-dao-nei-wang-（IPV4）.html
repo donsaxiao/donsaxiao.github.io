@@ -94,9 +94,9 @@ d. 填写规则：<br>
 ■ 虚拟机 IP 地址： 刚才查到的虚拟机 IP（例如 192.168.100.104）。<br>
 ■ 虚拟机端口： 虚拟机内部服务的端口（例如 Web 服务是 80）。<br>
 ■ 描述： 随便填，方便自己识别（我这里写RayOJ）。</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/d520c289-2126-4217-9ea8-f4639194b8b4"><img width="891" height="780" alt="Image" src="https://github.com/user-attachments/assets/d520c289-2126-4217-9ea8-f4639194b8b4" style="max-width: 100%; height: auto; max-height: 780px;; aspect-ratio: 891 / 780; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/d520c289-2126-4217-9ea8-f4639194b8b4"><img width="891" height="780" alt="Image" src="https://github.com/user-attachments/assets/d520c289-2126-4217-9ea8-f4639194b8b4" style="max-width: 100%; height: auto; max-height: 780px;; aspect-ratio: 891 / 780; background-color: var(--bgColor-muted); border-radius: 6px" class="js-gh-image-fallback"></a></p>
 <p><br><br></p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/974d4f1d-f9b0-44dd-9124-c75a131ec01f"><img width="729" height="756" alt="Image" src="https://github.com/user-attachments/assets/974d4f1d-f9b0-44dd-9124-c75a131ec01f" style="max-width: 100%; height: auto; max-height: 756px;; aspect-ratio: 729 / 756; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/974d4f1d-f9b0-44dd-9124-c75a131ec01f"><img width="729" height="756" alt="Image" src="https://github.com/user-attachments/assets/974d4f1d-f9b0-44dd-9124-c75a131ec01f" style="max-width: 100%; height: auto; max-height: 756px;; aspect-ratio: 729 / 756; background-color: var(--bgColor-muted); border-radius: 6px" class="js-gh-image-fallback"></a></p>
 <p><br><br></p>
 <p>● <strong>macOS 宿主机 (VMware Fusion)</strong>：<br>
 macOS 下图形界面配置较麻烦，通常需要手动编辑配置文件 nat.conf。<br>
@@ -118,7 +118,7 @@ c. 保存后重启 VMware 网络服务。</p>
 5. 访问方式：外网用户通过   “你的公网 IP:外部端口”   即可访问到虚拟机。</p>
 <h2>📊 <strong>三种模式对比总结</strong></h2>
 <p>为了让你更直观地理解，我整理了 VMware 三种主要模式在网络访问方面的区别：</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/b6909879-ff5e-47f4-8110-4eda64eb2aa2"><img width="1230" height="414" alt="Image" src="https://github.com/user-attachments/assets/b6909879-ff5e-47f4-8110-4eda64eb2aa2" style="max-width: 100%; height: auto; max-height: 414px;; aspect-ratio: 1230 / 414; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/b6909879-ff5e-47f4-8110-4eda64eb2aa2"><img width="1230" height="414" alt="Image" src="https://github.com/user-attachments/assets/b6909879-ff5e-47f4-8110-4eda64eb2aa2" style="max-width: 100%; height: auto; max-height: 414px;; aspect-ratio: 1230 / 414; background-color: var(--bgColor-muted); border-radius: 6px" class="js-gh-image-fallback"></a></p>
 <p>💡 <strong>常见问题排查</strong><br>
 1. 服务没启动： 确保虚拟机内部的 Web 服务或应用服务已经启动，并且正在监听你设置的端口（如 80 或 22）。<br>
 2. IP 地址变了： 如果虚拟机重启后 IP 变了，NAT 映射就会断开。建议在虚拟机系统内部设置静态 IP，或者在 VMware 的 DHCP 分配范围之外固定一个 IP。<br>
